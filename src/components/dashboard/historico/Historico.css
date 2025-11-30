@@ -1,0 +1,89 @@
+.historico-container {
+  padding: 20px;
+}
+
+.historico-container h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--cor-principal);
+  margin-bottom: 30px;
+}
+
+.historico-card {
+  background-color: var(--cor-card);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 35px;
+}
+
+.historico-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px 30px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.historico-header h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--cor-texto-padrao);
+  margin: 0;
+}
+
+.media-geral {
+  font-size: 1.1em;
+  margin: 0;
+  font-weight: 400;
+}
+
+.media-geral strong {
+  color: var(--cor-principal);
+  font-weight: 700;
+}
+
+.status-tag {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.status-aprovado {
+  background-color: #d4edda;
+  color: #1e7e34;
+}
+.status-recuperacao {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+/* Tabela de Disciplinas */
+.historico-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 400px; /* Responsividade da tabela */
+}
+
+.historico-table th,
+.historico-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.historico-table th {
+  background-color: #f8f9fa;
+  color: var(--cor-texto-padrao);
+  font-weight: 600;
+}
+
+.historico-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+.text-center {
+  text-align: center;
+}

@@ -1,0 +1,107 @@
+.boletim-container {
+  padding: 20px;
+}
+
+.boletim-container h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--cor-principal);
+  margin-bottom: 30px;
+}
+
+/* --- Informações do Aluno --- */
+.info-card {
+  background-color: var(--cor-card);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px 30px;
+  font-size: 1.05em;
+}
+
+.info-card strong {
+  color: var(--cor-principal);
+  font-weight: 600;
+}
+
+/* --- Cartão Principal do Boletim --- */
+.boletim-card {
+  background-color: var(--cor-card);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.boletim-card h2 {
+  font-size: 1.6em;
+  color: var(--cor-texto-padrao);
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+/* --- Tabela de Notas --- */
+/* Permite a rolagem horizontal em telas pequenas (Responsividade da Tabela) */
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.grades-table {
+  width: 100%;
+  /* Min-width para forçar a rolagem em mobile em vez de esmagar o conteúdo */
+  min-width: 900px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.grades-table th,
+.grades-table td {
+  padding: 12px 15px;
+  border: 1px solid #eee;
+}
+
+.grades-table thead th {
+  background-color: var(--cor-principal);
+  color: var(--cor-card);
+  font-weight: 600;
+}
+
+.grades-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.grades-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* --- Alinhamento das Colunas Numéricas (Ajuste fino) --- */
+.nota-col {
+  text-align: center;
+  width: 70px;
+}
+.media-col,
+.faltas-col {
+  text-align: center;
+  width: 100px;
+}
+
+.situacao-col {
+  font-weight: 700;
+  text-align: center;
+  width: 120px;
+}
+
+/* --- Estilos de Status (Cores) --- */
+.status-aprovado {
+  color: #1e7e34; /* Verde */
+}
+.status-recuperacao {
+  color: #ff9800; /* Laranja */
+}
+.status-reprovado {
+  color: #c82333; /* Vermelho */
+}

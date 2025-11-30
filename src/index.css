@@ -7,6 +7,16 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Cores base modernas e acessíveis */
+  --cor-principal: #17729b; /* Azul forte, cor do branding */
+  --cor-secundaria: #f59e0b; /* Laranja, para botões e destaque */
+  --cor-fundo-claro: #f4f7f9; /* Fundo suave */
+  --cor-fundo-escuro: #1d2024; /* Fundo para modo escuro / Sidebar */
+  --cor-card: #ffffff;
+  --cor-texto-padrao: #212529;
+  --cor-sombra: rgba(0, 0, 0, 0.15);
+  --transicao-rapida: 0.2s ease-in-out;
 }
 
 a {

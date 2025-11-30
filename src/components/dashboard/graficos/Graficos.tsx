@@ -1,5 +1,6 @@
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import './Graficos.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -34,7 +35,7 @@ const data = {
 
 function Graficos() {
     return (
-        <div>
+        <div className='grafico'>
             <h2>Vendas por Categoria</h2>
             <Pie data={data} />
         </div>

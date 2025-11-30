@@ -1,52 +1,249 @@
+/* BASE DO SIDEBAR (DESKTOP) */
 .sidebar {
   width: 240px;
-  background-color: #fff;
-  border-right: 1px solid #e0e0e0;
+  background-color: var(--cor-card);
+  /* border-right: 1px solid #e0e0e0; */
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+  /* padding: 20px 0; */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);  */
+  /* Sombra mais destacada 
+  position: sticky;
+  top: 0;
+  align-items: stretch;*/
+  transition: width 0.3s ease-in-out;
+  justify-content: space-between;
+  border-radius: 12px;
+  padding: 20px 0;
 }
 
-.sidebar-header {
+/* Estado Colapsado */
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar.collapsed .user-greeting,
+.sidebar.collapsed .sidebar-nav a span {
+  display: none;
+}
+.sidebar.collapsed .sidebar-nav a {
+  text-align: center;
+  justify-content: center;
+}
+
+/* --- CONTROLE DE VISIBILIDADE (TOGGLE) --- */
+.sidebar-header-top {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+
+.toggle-visibility-btn {
+  background: none;
+  border: 1px solid #ddd;
+  color: var(--cor-principal);
+  font-weight: bold;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Oculta o toggle button em mobile */
+.toggle-visibility-btn.desktop-only {
+  display: block;
+}
+
+/* --- BOTÕES DE FILTRO DE PERFIL E ANCORAGEM DOS LINKS --- */
+.profile-switcher {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Alinha ao topo */
   padding: 0 10px;
   margin-bottom: 20px;
+  /* Remove gap do container pai para controle individual */
+  gap: 0;
+}
+
+.profile-switcher button {
+  /* Novo estilo para o botão de toggle */
+  background-color: #f8f8f8;
+  color: var(--cor-texto-padrao);
+  border: 1px solid #eee;
+  padding: 10px 12px;
+  width: 100%;
+  margin-bottom: 5px; /* Espaço entre os botões */
+  font-size: 0.95em;
+  text-align: left;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+
+.profile-switcher button.active {
+  background-color: var(--cor-principal);
+  color: white;
+  border-color: var(--cor-principal);
+}
+
+/* --- ESTILO DA NAVEGAÇÃO INTERNA (LINKS CONDICIONAIS) --- */
+/* Remove a margem superior da navegação que aparece após o botão */
+.profile-switcher .sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  margin-top: -5px; /* Puxa para perto do botão */
+  margin-bottom: 15px; /* Espaço após a lista */
+
+  /* Destaque visual para o menu aberto */
+  border-left: 3px solid var(--cor-secundaria);
+  padding-left: 0;
+  background-color: #fafafa;
+}
+
+.profile-switcher .sidebar-nav a {
+  padding: 8px 10px 8px 25px; /* Recuo para visualmente aninhar os links */
+  margin: 0; /* Remove margem vertical entre links */
+  border-radius: 0;
+  font-size: 0.9em;
+  font-weight: 400;
+}
+
+.profile-switcher .sidebar-nav a:hover {
+  background-color: #f0f0f0;
+  color: var(--cor-principal);
+}
+
+.profile-switcher .sidebar-nav a.active {
+  background-color: #e6e6e6; /* Cor sutil para link ativo dentro da lista */
+  color: var(--cor-principal);
+  font-weight: 600;
+}
+
+/* --- CENTRALIZAÇÃO DA LOGO (DESKTOP) --- */
+.sidebar-logo {
+  width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px auto;
+  padding: 0 10px;
 }
 
 .user-greeting {
-  padding: 0 10px;
   font-size: 1.1em;
   font-weight: 500;
   margin-bottom: 30px;
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1; /* Empurra o "Sair" para baixo */
-  text-align: left;
-}
-
-.sidebar-nav a {
-  padding: 12px 20px;
-  margin: 4px 0;
-  border-radius: 8px;
-  color: #555;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-}
-
-.sidebar-nav a:hover {
-  background-color: #f4f4f4;
-}
-
-/* Esta classe é adicionada automaticamente pelo NavLink */
-.sidebar-nav a.active {
-  background-color: #0d6efd; /* Azul do item ativo */
-  color: #fff;
+  text-align: center;
 }
 
 .sidebar-footer {
   padding: 10px;
   font-size: 0.9em;
+  text-align: center;
+}
+
+/* ================================================= */
+/* === RESPONSIVIDADE E MENU HAMBÚRGUER (MOBILE) === */
+/* ================================================= */
+
+@media (max-width: 900px) {
+  /* Oculta elementos desktop */
+  .sidebar-logo.desktop-only,
+  .toggle-visibility-btn.desktop-only {
+    display: none !important;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+  }
+
+  /* 1. Cabeçalho Mobile (Sempre visível, contém logo e ícone) */
+  .sidebar-header-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    width: 100%;
+    background-color: var(--cor-card);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-header-mobile .sidebar-logo {
+    width: 120px;
+    margin: 0;
+  }
+
+  /* 2. Ícone Hambúrguer */
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 25px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .menu-toggle .bar {
+    width: 100%;
+    height: 3px;
+    background-color: var(--cor-principal);
+  }
+
+  /* 3. Conteúdo do Menu (Dropdown) */
+  .sidebar-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--cor-card);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding-bottom: 10px;
+  }
+
+  .sidebar-content.mobile-open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Ajustes internos do dropdown */
+  .user-greeting,
+  .sidebar-footer {
+    padding: 10px 20px;
+    text-align: left;
+  }
+
+  .profile-switcher {
+    /* Mostra os botões de perfil dentro do dropdown mobile */
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 15px 20px;
+  }
+
+  /* Ajustes de borda no mobile */
+  .profile-switcher .sidebar-nav {
+    border-left: none; /* Remove a borda no mobile */
+    margin-top: 0;
+    background-color: transparent;
+  }
+
+  .profile-switcher .sidebar-nav a {
+    padding: 10px 30px; /* Mantém o padding do dropdown */
+    margin: 0;
+    border-radius: 0;
+    text-align: left;
+  }
+
+  .profile-nav a.active {
+    background-color: #f0f0f0;
+    color: var(--cor-principal);
+  }
 }

@@ -1,0 +1,348 @@
+.calendario-container {
+  padding: 20px;
+}
+
+.calendario-container h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--cor-principal);
+  margin-bottom: 30px;
+}
+
+.calendario-card,
+.calendario-full-card {
+  background-color: var(--cor-card);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 35px;
+}
+
+.calendario-card h2,
+.calendario-full-card h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--cor-texto-padrao);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* --- Layout da Lista de Eventos --- */
+/* .eventos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.evento-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+.evento-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--cor-secundaria);
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.evento-data strong {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.evento-detalhes h3 {
+  margin: 0;
+  font-size: 1.1em;
+  color: var(--cor-principal);
+}
+
+.evento-detalhes p {
+  margin: 0;
+  font-size: 0.9em;
+  color: var(--cor-texto-padrao);
+}
+
+/* --- Layout do Calendário Mensal (Grid) --- */
+/* .calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.dia-semana {
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 0;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.dia {
+  text-align: center;
+  padding: 15px 0;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: default;
+  transition: background-color 0.2s;
+}
+
+.dia:hover {
+  background-color: #fafafa;
+}
+
+.dia-evento { */
+/* background-color: #e6f7ff; /* Fundo mais claro para eventos */
+/* border-color: var(--cor-principal);
+  font-weight: 600;
+  color: var(--cor-principal); 
+}  */
+
+/* src/components/dashboard/calendario/Calendario.css */
+
+.calendario-container {
+  padding: 20px;
+}
+
+.calendario-container h1 {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--cor-principal);
+  margin-bottom: 30px;
+}
+
+.calendario-card,
+.calendario-full-card {
+  background-color: var(--cor-card);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 35px;
+}
+
+.calendario-card h2,
+.calendario-full-card h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--cor-texto-padrao);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* ================================================= */
+/* --- ESTILOS DOS SELETORES DE MÊS/ANO --- */
+/* ================================================= */
+.calendario-selectors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--cor-card);
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 25px;
+  gap: 15px;
+}
+
+.calendario-selectors .select-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendario-selectors select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+.calendario-selectors .current-month-year {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin: 0 10px;
+}
+
+.calendario-selectors .btn-nav {
+  background-color: transparent;
+  color: var(--cor-principal);
+  border: 1px solid var(--cor-principal);
+  padding: 5px 10px;
+  font-size: 1.1em;
+  line-height: 1;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.calendario-selectors .btn-nav:hover {
+  background-color: var(--cor-principal);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .calendario-selectors {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .calendario-selectors .select-group {
+    justify-content: space-between;
+  }
+}
+/* ================================================= */
+/* --- FIM DOS ESTILOS DOS SELETORES --- */
+/* ================================================= */
+
+/* --- Layout da Lista de Eventos (Melhorado para ser o Calendário Completo) --- */
+.eventos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* Adiciona borda sutil para destacar a lista */
+  border: 1px solid #f0f0f0;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.evento-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.evento-item:hover {
+  background-color: #f7f7f7;
+}
+
+.evento-item:last-child {
+  border-bottom: none;
+}
+
+.evento-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--cor-secundaria);
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.evento-data strong {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.evento-detalhes h3 {
+  margin: 0;
+  font-size: 1.1em;
+  color: var(--cor-principal);
+}
+
+.evento-detalhes p {
+  margin: 0;
+  font-size: 0.9em;
+  color: var(--cor-texto-padrao);
+}
+
+.no-events {
+  text-align: center;
+  padding: 20px;
+  color: var(--cor-secundaria);
+  font-style: italic;
+}
+
+/* --- Layout do Calendário Mensal (Grid) --- */
+.calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px; /* Reduzido o gap para 5px */
+  width: 100%;
+}
+
+.dia-semana {
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 0;
+  background-color: #e6e6e6; /* Cor de fundo mais neutra */
+  border-radius: 4px;
+}
+
+.dia {
+  text-align: center;
+  padding: 10px 0; /* Reduzido o padding */
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: pointer; /* Cursor de interação */
+  transition: all 0.2s;
+  min-height: 50px;
+  font-size: 0.9em;
+}
+
+.dia:hover:not(.empty) {
+  background-color: #f0f0f0;
+}
+
+.empty {
+  background-color: #fafafa;
+  border-color: #f8f8f8;
+  cursor: default;
+}
+
+/* ESTADOS DE DIAS */
+.dia-evento {
+  background-color: #e6f7ff;
+  border-color: var(--cor-principal);
+  font-weight: 600;
+  color: var(--cor-principal);
+}
+
+.dia-hoje {
+  background-color: var(--cor-principal);
+  color: white;
+  font-weight: 700;
+  border-color: var(--cor-principal);
+}
+
+.dia-selecionado {
+  background-color: var(--cor-secundaria);
+  color: white;
+  font-weight: 700;
+  border: 2px solid var(--cor-principal);
+  transform: scale(1.05); /* Efeito de destaque */
+}
+
+/* --- Responsividade da Lista de Eventos (Mobile) --- */
+@media (max-width: 600px) {
+  .evento-detalhes h3 {
+    font-size: 1em;
+  }
+  .evento-detalhes p {
+    font-size: 0.85em;
+  }
+
+  .calendario-selectors .current-month-year {
+    font-size: 1.1em;
+  }
+}
