@@ -1,16 +1,18 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logoTipo from '../assets/LOGOTIPO.png';
 import '../components/Form.css';
 // import '../App.css';
 
 function FormCadastro() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         dataNascimento: '',
         cpf: '',
         password: '',
+        confirmPass: ''
     })
 
     // Função genérica para atualizar o estado quando qualquer campo do formulário mudar.
@@ -56,7 +58,12 @@ function FormCadastro() {
     const handleSubmit = (e) => {
         e.preventDefault()
         // Aqui você pode fazer o que quiser com os dados do formulário
-        console.log(formData)
+        if (formData.password == formData.confirmPass) {
+            console.log(formData);
+            navigate('/');
+        } else {
+            alert("As senhas não coincidem. Por favor, tente novamente.");
+        }
     }
 
     return (
@@ -91,6 +98,11 @@ function FormCadastro() {
                     <div className='input-group'>
                         <label htmlFor="password">Senha:</label>
                         <input type="password" id="password" name='password' value={formData.password} onChange={handleChange} required />
+                    </div>
+
+                    <div className='input-group'>
+                        <label htmlFor="confirmPass">Confirmar Senha:</label>
+                        <input type="password" id="confirmPass" name='confirmPass' value={formData.confirmPass} onChange={handleChange} required />
                     </div>
 
                     {/* Seção para Endereço */}
