@@ -1,0 +1,9 @@
+.grafico {
+    align-items: center;
+    /* background-color: blue; */
+    height: 50rem;
+}
+
+.grafico h2 {
+    color: var(--cor-principal);
+}
