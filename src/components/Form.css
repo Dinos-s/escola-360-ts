@@ -34,7 +34,6 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
     width: 561px;
-    text-align: center;
 }
 
 .login-card h2 {
@@ -54,6 +53,7 @@ body {
     font-weight: 500;
     font-size: 1.3em;
     margin-bottom: 5px;
+    text-align: left;
 }
 
 .input-group input {
@@ -104,4 +104,15 @@ body {
 .signup-link a {
     color: #fff;
     text-decoration: none;
+}
+
+/* Referenciade campos */
+#cpf.error{
+    border: 1px solid red;
+}
+
+.spanErro {
+    color: red;
+    font-size: 15px;
+    text-align: left;
 }
