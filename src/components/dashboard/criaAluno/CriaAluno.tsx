@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import axios from 'axios';
 import './CriaAluno.css';
 
 function CriaAluno() {
-const [form, setForm] = useState({
+    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
+    const [form, setForm] = useState({
         nome: "",
         cpf: "",
         matricula: "",
@@ -17,8 +20,41 @@ const [form, setForm] = useState({
         setForm({ ...form, [name]: value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError('');
+        setMessage('');
+
+        try {
+            const response = await axios.post(
+                'http://localhost:3000/aluno/cadastro', form
+            );
+
+            setMessage(`Usuário ${response.data.nome} cadastrado com sucesso!`);
+
+            setForm({
+                nome: "",
+                cpf: "",
+                matricula: "",
+                turma: "",
+                status: "",
+                deficiencia: "",
+                nascimento: "",
+            });
+
+        } catch (err: any) {
+            if (err.response && err.response.data) {
+                const errorMessage = err.response.data.message;
+
+                if (Array.isArray(errorMessage)) {
+                    setError(errorMessage.join(', '));
+                } else {
+                    setError(errorMessage || 'Erro desconhecido');
+                }
+            } else {
+                setError('Ocorreu um erro ao tentar cadastrar o aluno.');
+            }
+        }
         console.log("Dados enviados:", form);
         // Aqui você poderá usar axios.post("/alunos", form)
     };
@@ -26,7 +62,9 @@ const [form, setForm] = useState({
     return (
         <div className="main-container">
             <h1 className="profile-title">Cadastro Aluno</h1>
-
+            {/* Mensagens de erro ou sucesso */}
+            {error && <p className="error message">{error}</p>}
+            {message && <p className="success message">{message}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="profile-fields">
 
@@ -35,7 +73,7 @@ const [form, setForm] = useState({
 
                         <div className="form-group">
                             <label>Nome completo</label>
-                            <input 
+                            <input
                                 type="text"
                                 name="nome"
                                 value={form.nome}
@@ -46,7 +84,7 @@ const [form, setForm] = useState({
 
                         <div className="form-group">
                             <label>CPF</label>
-                            <input 
+                            <input
                                 type="text"
                                 name="cpf"
                                 value={form.cpf}
@@ -57,7 +95,7 @@ const [form, setForm] = useState({
 
                         <div className="form-group">
                             <label>Matrícula</label>
-                            <input 
+                            <input
                                 type="text"
                                 name="matricula"
                                 value={form.matricula}
@@ -73,7 +111,7 @@ const [form, setForm] = useState({
 
                         <div className="form-group">
                             <label>Turma</label>
-                            <input 
+                            <input
                                 type="text"
                                 name="turma"
                                 value={form.turma}
@@ -84,7 +122,7 @@ const [form, setForm] = useState({
 
                         <div className="form-group">
                             <label>Status</label>
-                            <select 
+                            <select
                                 name="status"
                                 value={form.status}
                                 onChange={handleChange}
@@ -97,7 +135,7 @@ const [form, setForm] = useState({
 
                         <div className="form-group">
                             <label>Deficiência</label>
-                            <input 
+                            <input
                                 type="text"
                                 name="deficiencia"
                                 value={form.deficiencia}

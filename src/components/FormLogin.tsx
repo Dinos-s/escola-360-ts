@@ -1,14 +1,49 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import logoTipo from '../assets/LOGOTIPO.png'
+import axios from "axios";
 import '../components/Form.css'
 
 function FormLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setMessage('');
+    setError('');
+
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/user/login', {
+        email,
+        password
+      })
+
+      const token = response.data.access_token;
+      localStorage.setItem('authToken', token);
+      setMessage('Login realizado com sucesso!');
+      setEmail('');
+      setPassword('');
+
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+
+        const errorMessage = err.response.data.message;
+
+        if (Array.isArray(errorMessage)) {
+          setError(errorMessage.join(', '));
+        } else {
+          setError(errorMessage || 'Erro desconhecido');
+        }
+
+      } else {
+        setError('Ocorreu um erro ao tentar fazer login.');
+      }
+    }
   }
 
   return (
@@ -19,6 +54,9 @@ function FormLogin() {
 
       <div className="login-card">
         <h2>Formulário de Login</h2>
+        {/* Mensagens de erro ou sucesso */}
+        {error && <p className="error message">{error}</p>}
+        {message && <p className="success message">{message}</p>}
         <form onSubmit={handleSubmit}>
           <div className='input-group'>
             <label htmlFor="email">E-mail:</label>

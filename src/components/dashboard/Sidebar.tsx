@@ -41,10 +41,10 @@ const ROTAS_COORDENADOR = [
 ];
 
 function Sidebar() {
-    const [userProfile, setUserProfile] = useState("aluno"); // Estado para armazenar o perfil do usuário
+    const [userProfile, setUserProfile] = useState<string|null>("aluno"); // Estado para armazenar o perfil do usuário
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const handleProfileClick = (profileName) => {
+    const handleProfileClick = (profileName:string|null) => {
         // Se o perfil clicado já estiver ativo, ele fecha (seta para null)
         // Se estiver inativo, ele ativa o perfil
         setUserProfile(userProfile === profileName ? null : profileName);
@@ -56,7 +56,7 @@ function Sidebar() {
         }
     };
 
-    const getRoutes = (profile) => {
+    const getRoutes = (profile:string) => {
         if (profile === "coordenador") return ROTAS_COORDENADOR;
         if (profile === "aluno") return ROTAS_ALUNO;
         if (profile === "professor") return ROTAS_PROFESSOR;
@@ -64,7 +64,7 @@ function Sidebar() {
     }
 
     // Função para renderizar o NavMenu
-    const renderNavMenu = (profile) => {
+    const renderNavMenu = (profile:string) => {
         const routes = getRoutes(profile);
         return (
             <nav id="sidebar-nav" className="sidebar-nav">
