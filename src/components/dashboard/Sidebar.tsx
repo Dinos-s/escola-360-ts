@@ -36,6 +36,8 @@ const ROTAS_COORDENADOR = [
     { to: "/dashboard/turma", name: "Criar Turma" },
     { to: "/dashboard/perfil", name: "Meu Perfil" },
     { to: "/dashboard/trocaSenha", name: "Trocar Senha" },
+    { to: "/dashboard/criaAluno", name: "Criar Aluno" },
+    { to: "/dashboard/criaProfessor", name: "Criar Professor" },
 ];
 
 function Sidebar() {

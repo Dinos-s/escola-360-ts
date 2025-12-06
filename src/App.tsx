@@ -18,6 +18,8 @@ import Historico from './components/dashboard/historico/Historico'
 import Presenca from './components/dashboard/presenca/Presenca'
 import CriaMural from './components/dashboard/criaMural/CriaMural'
 import ConfNotas from './components/dashboard/confNotas/ConfNotas'
+import CriaAluno from './components/dashboard/criaAluno/CriaAluno'
+import CriaProfessor from './components/dashboard/criaProfessor/CriaProfessor'
 
 
 function App() {
@@ -44,6 +46,8 @@ function App() {
         <Route path="crimural" element={<CriaMural />} />
         <Route path="confNotas" element={<ConfNotas />} />
         <Route path="criCalendario" element={<CriaCalendario />} />
+        <Route path="criaAluno" element={<CriaAluno />} />
+        <Route path="criaProfessor" element={<CriaProfessor />} />
       </Route>
     </Routes>
   )

@@ -125,7 +125,7 @@ function Usuarios() {
   
   // Componente auxiliar para renderizar a tabela
   const TabelaDeUsuarios = ({ dados, tipo }) => (
-    <div className="table-responsive">
+    <div className="table-responsive-users">
       <table className="user-table">
         <thead>
           <tr>
