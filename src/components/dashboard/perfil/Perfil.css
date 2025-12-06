@@ -70,7 +70,12 @@
     color: white;
 }
 
+
 .cancel-btn {
     background-color: #f7a01d;
     color: white;
+}
+
+.save-btn:hover, .cancel-btn:hover {
+    opacity: .8;
 }

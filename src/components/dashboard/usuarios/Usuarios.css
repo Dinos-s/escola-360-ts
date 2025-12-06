@@ -107,7 +107,7 @@
 }
 
 /* Botão */
-button {
+.action-btn {
   /* margin-top: 20px; */
   padding: 15px;
   background: #007bff;
@@ -119,7 +119,7 @@ button {
   font-size: 15px;
 }
 
-button:hover {
+.action-btn:hover {
   background: lightskyblue;
 }
 
