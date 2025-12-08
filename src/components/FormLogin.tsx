@@ -9,6 +9,7 @@ function FormLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [tipoUser, setTipoUser] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +21,8 @@ function FormLogin() {
       const response = await axios.post(
         'http://localhost:3000/user/login', {
         email,
-        password
+        password,
+        tipoUser
       })
 
       const token = response.data.access_token;
@@ -58,6 +60,46 @@ function FormLogin() {
         {error && <p className="error message">{error}</p>}
         {message && <p className="success message">{message}</p>}
         <form onSubmit={handleSubmit}>
+
+          <div className="tipoUser-group">
+            <label className="tipoUser-label">Qual o seu tipo de usuário?</label>
+            <div className="radio-options">
+              <label className={`radio-label ${tipoUser === 'Aluno' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="tipoUser"
+                  value="Aluno"
+                  className="radio-input"
+                  checked={tipoUser === 'Aluno'}
+                  onChange={(e) => setTipoUser(e.target.value)}
+                />
+                Aluno
+              </label>
+              <label className={`radio-label ${tipoUser === 'Professor' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="tipoUser"
+                  value="Professor"
+                  className="radio-input"
+                  checked={tipoUser === 'Professor'}
+                  onChange={(e) => setTipoUser(e.target.value)}
+                />
+                Professor
+              </label>
+              <label className={`radio-label ${tipoUser === 'Coordenador' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="tipoUser"
+                  value="Coordenador"
+                  className="radio-input"
+                  checked={tipoUser === 'Coordenador'}
+                  onChange={(e) => setTipoUser(e.target.value)}
+                />
+                Coordenador
+              </label>
+            </div>
+          </div>
+
           <div className='input-group'>
             <label htmlFor="email">E-mail:</label>
             <input

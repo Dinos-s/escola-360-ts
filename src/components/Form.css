@@ -12,7 +12,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 .logo {
@@ -40,6 +40,59 @@ body {
     text-align: center;
     margin-bottom: 20px;
     color: #fff;
+}
+
+.tipoUser-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.tipoUser-label {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/* Container dos radio buttons */
+.radio-options {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Label de cada opção */
+.radio-label {
+    display: flex;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+/* Estado selecionado */
+.radio-label.selected {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Hover effect */
+.radio-label:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Input radio customizado */
+.radio-input {
+    margin-right: 8px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: #F59E0B; /* Cor laranja para combinar com o botão */
 }
 
 .input-group {

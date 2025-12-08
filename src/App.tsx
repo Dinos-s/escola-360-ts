@@ -20,6 +20,7 @@ import CriaMural from './components/dashboard/criaMural/CriaMural'
 import ConfNotas from './components/dashboard/confNotas/ConfNotas'
 import CriaAluno from './components/dashboard/criaAluno/CriaAluno'
 import CriaProfessor from './components/dashboard/criaProfessor/CriaProfessor'
+import Disciplina from './components/dashboard/disciplina/Disciplina'
 
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
         <Route path='trocaSenha' element={<TrocaSenha />} />
         <Route path='usuarios' element={<Usuarios />} />
         <Route path='calendario' element={<Calendario />} />
-         <Route path="notas" element={<Notas />} />
+        <Route path="notas" element={<Notas />} />
         <Route path="presenca" element={<Presenca />} />
         <Route path="usuarios" element={<Usuarios />} />
         <Route path="crimural" element={<CriaMural />} />
@@ -48,6 +49,7 @@ function App() {
         <Route path="criCalendario" element={<CriaCalendario />} />
         <Route path="criaAluno" element={<CriaAluno />} />
         <Route path="criaProfessor" element={<CriaProfessor />} />
+        <Route path="disciplina" element={<Disciplina />} />
       </Route>
     </Routes>
   )
