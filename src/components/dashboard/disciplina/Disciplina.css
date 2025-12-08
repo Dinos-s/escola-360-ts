@@ -1,0 +1,79 @@
+.main-container {
+    flex-grow: 1;
+    padding: 20px 40px;
+    background-color: #fcfcfc;
+}
+
+.disciplina-title {
+    margin-bottom: 25px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.card-fields {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.card-fields .column {
+    flex: 1;
+    /* max-width: 400px; */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 1em;
+}
+
+.btn-salvar {
+    align-items: flex-start;
+    background-color: #f7a01d;
+    color: #fff;
+}
+
+.btn-salvar:hover {
+    opacity: 0.9;
+}
+
+.tabela-disciplina{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.disciplina-table {
+    /* max-width: 900px; */
+  /* ajuste como quiser */
+  width: 100%;
+  /* margin: 0 auto; */
+}
+
+.disciplina-table thead th {
+    background-color: #b4b5b6;
+    width: 25px;
+    padding: 14px;
+}
+
+.acoes {
+    display: flex;
+    gap: 10px;
+    justify-content: space-evenly;
+}

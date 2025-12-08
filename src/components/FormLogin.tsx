@@ -62,7 +62,7 @@ function FormLogin() {
         <form onSubmit={handleSubmit}>
 
           <div className="tipoUser-group">
-            <label className="tipoUser-label">Qual o seu tipo de usuário?</label>
+            {/* <label className="tipoUser-label">Qual o seu tipo de usuário?</label> */}
             <div className="radio-options">
               <label className={`radio-label ${tipoUser === 'Aluno' ? 'selected' : ''}`}>
                 <input
