@@ -128,3 +128,56 @@ function Sidebar() {
 }
 
 export default Sidebar;
+
+// {
+//     // Obtém tipo do usuário salvo no login
+//     const tipoUser = localStorage.getItem("tipoUser");
+
+//     const getRoutes = () => {
+//         if (tipoUser === "coordenador") return ROTAS_COORDENADOR;
+//         if (tipoUser === "professor") return ROTAS_PROFESSOR;
+//         if (tipoUser === "aluno") return ROTAS_ALUNO;
+//         return [];
+//     };
+
+//     const routes = getRoutes();
+
+//     const handleLogout = () => {
+//         localStorage.clear();
+//         window.location.href = "/";
+//     };
+
+//     return (
+//         <aside className="sidebar">
+
+//             <div className="sidebar-content">
+
+//                 <img src={logoTipo} alt="Escola 360" className="sidebar-logo" />
+
+//                 <p className="user-greeting">
+//                     Olá, {localStorage.getItem("userName") || "Usuário"}
+//                 </p>
+
+//                 <nav id="sidebar-nav" className="sidebar-nav">
+//                     {routes.map((route, index) => (
+//                         <NavLink
+//                             key={index}
+//                             to={route.to}
+//                             end={route.end || false}
+//                         >
+//                             {route.name}
+//                         </NavLink>
+//                     ))}
+//                 </nav>
+
+//             </div>
+
+//             <div className="sidebar-footer">
+//                 <button onClick={handleLogout} className="logout-btn">
+//                     Sair
+//                 </button>
+//             </div>
+
+//         </aside>
+//     );
+// }

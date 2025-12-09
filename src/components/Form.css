@@ -131,6 +131,8 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+
+    margin: 15px 0;
 }
 
 .btn-login:hover {
@@ -182,4 +184,35 @@ body {
 
 .error {
     color: #FF0000;
+}
+
+/* Para envolver o input e o botão toggle */
+.password-wrapper {
+  position: relative; /* Define o contexto para o ícone absoluto */
+  display: flex;
+  align-items: center;
+}
+
+/* Garante que o input ocupe o espaço e permite espaço para o ícone */
+.password-wrapper input {
+  padding-right: 40px; /* Adiciona espaço para o botão/ícone */
+  width: 100%;
+}
+
+/* Estiliza e posiciona o botão de toggle */
+.password-toggle-btn {
+  position: absolute;
+  right: 10px; /* Posição à direita */
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.2rem;
+  height: 100%; /* Ajusta a altura */
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+.password-toggle-btn:focus {
+  outline: none; /* Remove o contorno ao focar */
 }

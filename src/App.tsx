@@ -56,3 +56,86 @@ function App() {
 }
 
 export default App
+
+
+
+
+
+// // ============================================
+// // 1. ROTA PROTEGIDA
+// // ============================================
+// function ProtectedRoute({ children }: any) {
+//   const token = localStorage.getItem("authToken");
+
+//   if (!token) {
+//     return <Navigate to="/" replace />;
+//   }
+
+//   return children;
+// }
+
+// // ============================================
+// // 2. ROTA PROTEGIDA POR PERFIL
+// // ============================================
+// function RoleBasedRoute({ children, allowed }: any) {
+//   const tipoUser = localStorage.getItem("tipoUser");
+
+//   if (!allowed.includes(tipoUser)) {
+//     return <Navigate to="/dashboard" replace />;
+//   }
+
+//   return children;
+// }
+
+// // ============================================
+// // 3. APP PRINCIPAL
+// // ============================================
+// function App() {
+
+//   return (
+//     <Routes>
+//       {/* TELAS LIVRES */}
+//       <Route path="/" element={<FormLogin />} />
+//       <Route path="/cadastro" element={<FormCadastro />} />
+//       <Route path="/recSenha" element={<FormRecSenha />} />
+
+//       {/* DASHBOARD PROTEGIDO */}
+//       <Route
+//         path="/dashboard"
+//         element={
+//           <ProtectedRoute>
+//             <Dashboard />
+//           </ProtectedRoute>
+//         }
+//       >
+
+//         {/* ROTA PADRÃO */}
+//         <Route index element={<Mural />} />
+
+//         {/* ALUNO */}
+//         <Route path="graficos" element={<RoleBasedRoute allowed={["aluno"]}><Graficos /></RoleBasedRoute>} />
+//         <Route path="boletim" element={<RoleBasedRoute allowed={["aluno"]}><Boletim /></RoleBasedRoute>} />
+//         <Route path="historico" element={<RoleBasedRoute allowed={["aluno"]}><Historico /></RoleBasedRoute>} />
+
+//         {/* PROFESSOR */}
+//         <Route path="notas" element={<RoleBasedRoute allowed={["professor"]}><Notas /></RoleBasedRoute>} />
+//         <Route path="presenca" element={<RoleBasedRoute allowed={["professor"]}><Presenca /></RoleBasedRoute>} />
+
+//         {/* COORDENADOR */}
+//         <Route path="usuarios" element={<RoleBasedRoute allowed={["coordenador"]}><Usuarios /></RoleBasedRoute>} />
+//         <Route path="crimural" element={<RoleBasedRoute allowed={["coordenador"]}><CriaMural /></RoleBasedRoute>} />
+//         <Route path="confNotas" element={<RoleBasedRoute allowed={["coordenador"]}><ConfNotas /></RoleBasedRoute>} />
+//         <Route path="criCalendario" element={<RoleBasedRoute allowed={["coordenador"]}><CriaCalendario /></RoleBasedRoute>} />
+//         <Route path="criaAluno" element={<RoleBasedRoute allowed={["coordenador"]}><CriaAluno /></RoleBasedRoute>} />
+//         <Route path="criaProfessor" element={<RoleBasedRoute allowed={["coordenador"]}><CriaProfessor /></RoleBasedRoute>} />
+//         <Route path="disciplina" element={<RoleBasedRoute allowed={["coordenador"]}><Disciplina /></RoleBasedRoute>} />
+
+//         {/* ROTAS DE TODOS OS USUÁRIOS */}
+//         <Route path="perfil" element={<Perfil />} />
+//         <Route path="trocaSenha" element={<TrocaSenha />} />
+//         <Route path="calendario" element={<Calendario />} />
+
+//       </Route>
+//     </Routes>
+//   );
+// }
