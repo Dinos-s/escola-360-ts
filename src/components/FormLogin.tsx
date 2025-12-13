@@ -27,31 +27,31 @@ function FormLogin() {
         password
       })
 
-      const token = response.data.access_token;
+      const token = response.data.access_token;      
       localStorage.setItem('authToken', token);
 
 
       // Desestruturando os dados do backend
-      // const { access_token, tipoUser } = response.data;
+      const { access_token, role } = response.data;
 
-      // // Salva token + tipo do usuário
-      // localStorage.setItem('authToken', access_token);
-      // localStorage.setItem('tipoUser', tipoUser);
+      // Salva token + tipo do usuário
+      localStorage.setItem('authToken', access_token);
+      localStorage.setItem('tipoUser', role);
 
       // setMessage('Login realizado com sucesso!');
       // setEmail('');
       // setPassword('');
 
-      // // Redirecionamento por perfil
-      // if (tipoUser === "coordenador") {
-      //   window.location.href = "/dashboard";
-      // } else if (tipoUser === "professor") {
-      //   window.location.href = "/dashboard";
-      // } else if (tipoUser === "aluno") {
-      //   window.location.href = "/dashboard";
-      // } else {
-      //   window.location.href = "/";
-      // }
+      // Redirecionamento por perfil
+      if (role === "coordenador") {
+        window.location.href = "/dashboard";
+      } else if (role === "professor") {
+        window.location.href = "/dashboard";
+      } else if (role === "aluno") {
+        window.location.href = "/dashboard";
+      } else {
+        window.location.href = "/";
+      }
 
       setMessage('Login realizado com sucesso!');
       setEmail('');

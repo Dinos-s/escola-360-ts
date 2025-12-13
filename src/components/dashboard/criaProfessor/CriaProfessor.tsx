@@ -64,7 +64,7 @@ function CriaProfessor() {
 
     return (
         <div className="main-container">
-            <h1 className="profile-title">Cadastro Aluno</h1>
+            <h1 className="profile-title">Cadastro Professor</h1>
             {/* Mensagens de erro ou sucesso */}
             {error && <p className="error message">{error}</p>}
             {message && <p className="success message">{message}</p>}

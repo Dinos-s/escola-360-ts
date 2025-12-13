@@ -56,44 +56,66 @@ function Sidebar() {
         }
     };
 
-    const getRoutes = (profile:string) => {
-        if (profile === "coordenador") return ROTAS_COORDENADOR;
-        if (profile === "aluno") return ROTAS_ALUNO;
-        if (profile === "professor") return ROTAS_PROFESSOR;
-        return [];
-    }
+    // Obtém tipo do usuário salvo no login
+    const tipoUser = localStorage.getItem("tipoUser");
 
-    // Função para renderizar o NavMenu
-    const renderNavMenu = (profile:string) => {
-        const routes = getRoutes(profile);
-        return (
-            <nav id="sidebar-nav" className="sidebar-nav">
-                {routes.map((route, index) => (
-                    <NavLink
-                        key={index}
-                        to={route.to}
-                        end={route.end || false}
-                        onClick={closeMenu}
-                    >
-                        {route.name}
-                    </NavLink>
-                ))}
-            </nav>
-        );
+    const getRoutes = () => {
+        if (tipoUser === "coordenador") return ROTAS_COORDENADOR;
+        if (tipoUser === "professor") return ROTAS_PROFESSOR;
+        if (tipoUser === "aluno") return ROTAS_ALUNO;
+        return [];
     };
+
+    const handleLogout = () => {
+        localStorage.clear();
+        window.location.href = "/";
+    };
+    const routes = getRoutes();
+    // Função para renderizar o NavMenu
+    // const renderNavMenu = (profile:string) => {
+    //     const routes = getRoutes(profile);
+    //     return (
+    //         <nav id="sidebar-nav" className="sidebar-nav">
+    //             {routes.map((route, index) => (
+    //                 <NavLink
+    //                     key={index}
+    //                     to={route.to}
+    //                     end={route.end || false}
+    //                     onClick={closeMenu}
+    //                 >
+    //                     {route.name}
+    //                 </NavLink>
+    //             ))}
+    //         </nav>
+    //     );
+    // };
 
     return (
         <aside className="sidebar">
             <div className={`sidebar-content ${isMobileMenuOpen ? "mobile-open" : ""}`}>
                 <img src={logoTipo} alt="Escola 360" className="sidebar-logo desktop-only" />
 
-                <p className="user-greeting">Olá, Maria</p>
+                <p className="user-greeting">
+                    Olá, {localStorage.getItem("userName") || "Usuário"}
+                </p>
 
-                <div className="profile-switcher">
+                <nav id="sidebar-nav" className="sidebar-nav">
+                    {routes.map((route, index) => (
+                        <NavLink
+                            key={index}
+                            to={route.to}
+                            end={route.end || false}
+                        >
+                            {route.name}
+                        </NavLink>
+                    ))}
+                </nav>
+
+                {/* <div className="profile-switcher">
                     <button onClick={() => handleProfileClick("aluno")}
                         className={`profile-btn ${userProfile === "aluno" ? "active" : ""}`}
                         title="Visualizar rotas do Aluno">Aluno</button>
-                    {/* LINKS DO ALUNO (Visível se 'aluno' estiver ativo) */}
+                    {/* LINKS DO ALUNO (Visível se 'aluno' estiver ativo) *
                     {userProfile === "aluno" && renderNavMenu("aluno")}
 
                     <button
@@ -104,7 +126,7 @@ function Sidebar() {
                     >
                         Professor
                     </button>
-                    {/* LINKS DO PROFESSOR (Visível se 'professor' estiver ativo) */}
+                    {/* LINKS DO PROFESSOR (Visível se 'professor' estiver ativo) *
                     {userProfile === "professor" && renderNavMenu("professor")}
 
                     <button
@@ -115,13 +137,15 @@ function Sidebar() {
                     >
                         Coordenador
                     </button>
-                    {/* LINKS DO COORDENADOR (Visível se 'coordenador' estiver ativo) */}
+                    {/* LINKS DO COORDENADOR (Visível se 'coordenador' estiver ativo) *
                     {userProfile === "coordenador" && renderNavMenu("coordenador")}
-                </div>
+                </div> */}
             </div>
 
             <div className="sidebar-footer">
-                <a href="/">Sair</a>
+                <button onClick={handleLogout} className="logout-btn">
+                    Sair
+                </button>
             </div>
         </aside>
     )

@@ -134,10 +134,66 @@
   text-align: center;
 }
 
+.user-greeting {
+  font-size: 1.05em;
+  font-weight: 500;
+  margin-bottom: 25px;
+  text-align: center;
+  color: var(--cor-texto-padrao);
+}
+
+/* ================= NAV ================= */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 12px;
+}
+
+/* Links */
+.sidebar-nav a {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-weight: 500;
+  color: var(--cor-texto-padrao);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.sidebar-nav a:hover {
+  background-color: #f2f2f2;
+  color: var(--cor-principal);
+}
+
+/* Ativo */
+.sidebar-nav a.active {
+  background-color: var(--cor-principal);
+  color: #fff;
+  font-weight: 600;
+}
+
 .sidebar-footer {
   padding: 10px;
   font-size: 0.9em;
   text-align: center;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #d30b0b;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #333;
 }
 
 /* ================================================= */
