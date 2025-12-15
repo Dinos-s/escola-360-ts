@@ -7,12 +7,15 @@ function CriaAluno() {
     const [message, setMessage] = useState('');
     const [form, setForm] = useState({
         nome: "",
+        email: "",
+        password: "",
         cpf: "",
         matricula: "",
         turma: "",
         status: "",
-        deficiencia: "",
-        nascimento: "",
+        // deficiencia: "",
+        dataNasc: "",
+        anoLetivo: ""
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -27,19 +30,22 @@ function CriaAluno() {
 
         try {
             const response = await axios.post(
-                'http://localhost:3000/aluno/cadastro', form
+                'http://localhost:3000/aluno/registro', form
             );
 
             setMessage(`Usuário ${response.data.nome} cadastrado com sucesso!`);
 
             setForm({
                 nome: "",
+                email: "",
+                password: "",
                 cpf: "",
                 matricula: "",
                 turma: "",
                 status: "",
-                deficiencia: "",
-                nascimento: "",
+                // deficiencia: "",
+                dataNasc: "",
+                anoLetivo: "",
             });
 
         } catch (err: any) {
@@ -104,6 +110,28 @@ function CriaAluno() {
                             />
                         </div>
 
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={form.email}
+                                onChange={handleChange}
+                                placeholder="Digite o email do aluno"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Ano Letivo</label>
+                            <input
+                                type="number"
+                                name="anoLetivo"
+                                value={form.anoLetivo}
+                                onChange={handleChange}
+                                placeholder="Digite o ano letivo"
+                            />
+                        </div>
+
                     </div>
 
                     {/* ---------- COLUNA 2 ---------- */}
@@ -133,7 +161,7 @@ function CriaAluno() {
                             </select>
                         </div>
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Deficiência</label>
                             <input
                                 type="text"
@@ -141,6 +169,27 @@ function CriaAluno() {
                                 value={form.deficiencia}
                                 onChange={handleChange}
                                 placeholder="Caso tenha, descreva"
+                                /> 
+                        </div> */}
+
+                        <div className="form-group">
+                            <label>Data de Nascimento</label>
+                            <input
+                                type="date"
+                                name="dataNasc"
+                                value={form.dataNasc}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Senha</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={form.password}
+                                onChange={handleChange}
+                                placeholder="Digite a senha do aluno"
                             />
                         </div>
 
