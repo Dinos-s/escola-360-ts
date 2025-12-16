@@ -1,22 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CriaAluno.css';
 
 function CriaAluno() {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
+    const [turmas, setTurmas] = useState<{ id: number; nome: string; turno: string }[]>([]);
     const [form, setForm] = useState({
         nome: "",
         email: "",
         password: "",
         cpf: "",
         matricula: "",
-        turma: "",
+        id_turma: "",
         status: "",
-        // deficiencia: "",
-        dataNasc: "",
-        anoLetivo: ""
+        deficiencia: "",
+        tipoDeficiencia: "",
+        dataNasc: ""
     });
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/turma')
+            .then(response => {
+                setTurmas(response.data);
+            })
+            .catch(() => {
+                setError('Erro ao carregar turmas');
+            });
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -41,11 +52,11 @@ function CriaAluno() {
                 password: "",
                 cpf: "",
                 matricula: "",
-                turma: "",
+                id_turma: "",
                 status: "",
-                // deficiencia: "",
-                dataNasc: "",
-                anoLetivo: "",
+                deficiencia: "",
+                tipoDeficiencia: "",
+                dataNasc: ""
             });
 
         } catch (err: any) {
@@ -76,7 +87,6 @@ function CriaAluno() {
 
                     {/* ---------- COLUNA 1 ---------- */}
                     <div className="column">
-
                         <div className="form-group">
                             <label>Nome completo</label>
                             <input
@@ -84,7 +94,6 @@ function CriaAluno() {
                                 name="nome"
                                 value={form.nome}
                                 onChange={handleChange}
-                                placeholder="Digite o nome do aluno"
                             />
                         </div>
 
@@ -95,7 +104,6 @@ function CriaAluno() {
                                 name="cpf"
                                 value={form.cpf}
                                 onChange={handleChange}
-                                placeholder="Digite o CPF"
                             />
                         </div>
 
@@ -106,7 +114,6 @@ function CriaAluno() {
                                 name="matricula"
                                 value={form.matricula}
                                 onChange={handleChange}
-                                placeholder="Número da matrícula"
                             />
                         </div>
 
@@ -117,21 +124,18 @@ function CriaAluno() {
                                 name="email"
                                 value={form.email}
                                 onChange={handleChange}
-                                placeholder="Digite o email do aluno"
                             />
                         </div>
 
                         <div className="form-group">
-                            <label>Ano Letivo</label>
+                            <label>Data de Nascimento</label>
                             <input
-                                type="number"
-                                name="anoLetivo"
-                                value={form.anoLetivo}
+                                type="date"
+                                name="dataNasc"
+                                value={form.dataNasc}
                                 onChange={handleChange}
-                                placeholder="Digite o ano letivo"
                             />
                         </div>
-
                     </div>
 
                     {/* ---------- COLUNA 2 ---------- */}
@@ -139,13 +143,18 @@ function CriaAluno() {
 
                         <div className="form-group">
                             <label>Turma</label>
-                            <input
-                                type="text"
-                                name="turma"
-                                value={form.turma}
+                            <select
+                                name="id_turma"
+                                value={form.id_turma}
                                 onChange={handleChange}
-                                placeholder="Digite a turma"
-                            />
+                            >
+                                <option value="">Selecione a turma</option>
+                                {turmas.map((turma) => (
+                                    <option key={turma.id} value={turma.id}>
+                                        {turma.nome} - {turma.turno}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="form-group">
@@ -155,29 +164,28 @@ function CriaAluno() {
                                 value={form.status}
                                 onChange={handleChange}
                             >
-                                <option value="">Selecione status</option>
+                                <option value="">Selecione</option>
                                 <option value="Ativo">Ativo</option>
                                 <option value="Inativo">Inativo</option>
                             </select>
                         </div>
 
-                        {/* <div className="form-group">
+                        <div className="form-group">
                             <label>Deficiência</label>
                             <input
                                 type="text"
                                 name="deficiencia"
                                 value={form.deficiencia}
                                 onChange={handleChange}
-                                placeholder="Caso tenha, descreva"
-                                /> 
-                        </div> */}
+                            />
+                        </div>
 
                         <div className="form-group">
-                            <label>Data de Nascimento</label>
+                            <label>Tipo de Deficiência</label>
                             <input
-                                type="date"
-                                name="dataNasc"
-                                value={form.dataNasc}
+                                type="text"
+                                name="tipoDeficiencia"
+                                value={form.tipoDeficiencia}
                                 onChange={handleChange}
                             />
                         </div>
@@ -189,21 +197,18 @@ function CriaAluno() {
                                 name="password"
                                 value={form.password}
                                 onChange={handleChange}
-                                placeholder="Digite a senha do aluno"
                             />
                         </div>
-
                     </div>
                 </div>
-
-                {/* ---------- BOTÕES ---------- */}
-                <div className="action-buttons">
+        {/* ---------- BOTÕES ---------- */ }
+        < div className = "action-buttons" >
                     <button type="submit" className="save-btn">Cadastrar</button>
                     <button type="button" className="cancel-btn">Cancelar</button>
-                </div>
-            </form>
+                </div >
+            </form >
 
-        </div>
+        </div >
     );
 }
 

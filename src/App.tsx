@@ -17,6 +17,7 @@ import Boletim from './components/dashboard/boletim/Boletim'
 import Historico from './components/dashboard/historico/Historico'
 import Presenca from './components/dashboard/presenca/Presenca'
 import CriaMural from './components/dashboard/criaMural/CriaMural'
+import CriaTurma from './components/dashboard/turma/Turma'
 import ConfNotas from './components/dashboard/confNotas/ConfNotas'
 import CriaAluno from './components/dashboard/criaAluno/CriaAluno'
 import CriaProfessor from './components/dashboard/criaProfessor/CriaProfessor'
@@ -114,9 +115,16 @@ function App() {
             <ConfNotas />
           </RoleBasedRoute>
         } />
+
         <Route path="criCalendario" element={
           <RoleBasedRoute allowed={["coordenador"]}>
             <CriaCalendario />
+          </RoleBasedRoute>
+        } />
+
+        <Route path="turma" element={
+          <RoleBasedRoute allowed={["coordenador"]}>
+            <CriaTurma />
           </RoleBasedRoute>
         } />
 

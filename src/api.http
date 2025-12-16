@@ -1,0 +1,22 @@
+POST http://localhost:3000/administrativo/registro
+content-type: application/json
+
+{
+    "nome": "Jorge",
+    "matricula": "0001",
+    "cpf": "123.456.789-01",
+    "status": "ativo",
+    "dataNasc": "1980-01-01",
+    "email": "coordenador1@gmail.com",
+    "password": "123456"
+}
+
+###
+
+POST http://localhost:3000/turma/registro
+content-type: application/json
+
+{
+    "nome": "9º Ano",
+    "turno": "Manhã"
+}

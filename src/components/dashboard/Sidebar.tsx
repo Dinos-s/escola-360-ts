@@ -98,6 +98,8 @@ function Sidebar() {
                 <p className="user-greeting">
                     Olá, {localStorage.getItem("userName") || "Usuário"}
                 </p>
+                
+                <hr />
 
                 <nav id="sidebar-nav" className="sidebar-nav">
                     {routes.map((route, index) => (

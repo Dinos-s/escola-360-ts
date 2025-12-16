@@ -1,21 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CriaProfessor.css';
 
 function CriaProfessor() {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
+    const [turmas, setTurmas] = useState<{ id: number; nome: string; turno: string }[]>([]);
+
     const [form, setForm] = useState({
         nome: "",
         email: "",
+        password: "",
         cpf: "",
         matricula: "",
-        turma: "",
-        disciplina: "",
+        id_turma: "",
         status: "",
+        dataAdmissao: "",
+        formacaoAcad: "",
+        titulacao: "",
         deficiencia: "",
-        nascimento: "",
+        tipoDeficiencia: "",
     });
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/turma')
+            .then(response => {
+                setTurmas(response.data);
+            })
+            .catch(() => {
+                setError('Erro ao carregar turmas');
+            });
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -30,7 +45,7 @@ function CriaProfessor() {
 
         try {
             const response = await axios.post(
-                'http://localhost:3000/professor/cadastro', form
+                'http://localhost:3000/professor/registro', form
             );
 
             setMessage(`Usuário ${response.data.nome} cadastrado com sucesso!`);
@@ -38,13 +53,16 @@ function CriaProfessor() {
             setForm({
                 nome: "",
                 email: "",
+                password: "",
                 cpf: "",
                 matricula: "",
-                turma: "",
-                disciplina: "",
+                id_turma: "",
                 status: "",
+                dataAdmissao: "",
+                formacaoAcad: "",
+                titulacao: "",
                 deficiencia: "",
-                nascimento: "",
+                tipoDeficiencia: "",
             });
 
         } catch (err: any) {
@@ -76,46 +94,32 @@ function CriaProfessor() {
 
                         <div className="form-group">
                             <label>Nome completo</label>
-                            <input 
-                                type="text"
-                                name="nome"
-                                value={form.nome}
-                                onChange={handleChange}
-                                placeholder="Digite o nome do aluno"
-                            />
+                            <input name="nome" value={form.nome} onChange={handleChange} />
                         </div>
 
                         <div className="form-group">
                             <label>CPF</label>
-                            <input 
-                                type="text"
-                                name="cpf"
-                                value={form.cpf}
-                                onChange={handleChange}
-                                placeholder="Digite o CPF"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Disciplina</label>
-                            <input 
-                                type="text"
-                                name="disciplina"
-                                value={form.disciplina}
-                                onChange={handleChange}
-                                placeholder="Digite a disciplina"
-                            />
+                            <input name="cpf" value={form.cpf} onChange={handleChange} />
                         </div>
 
                         <div className="form-group">
                             <label>Matrícula</label>
-                            <input 
-                                type="text"
-                                name="matricula"
-                                value={form.matricula}
-                                onChange={handleChange}
-                                placeholder="Número da matrícula"
-                            />
+                            <input name="matricula" value={form.matricula} onChange={handleChange} />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Data de Admissão</label>
+                            <input type="date" name="dataAdmissao" value={form.dataAdmissao} onChange={handleChange} />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Formação Acadêmica</label>
+                            <input name="formacaoAcad" value={form.formacaoAcad} onChange={handleChange} />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Titulação</label>
+                            <input name="titulacao" value={form.titulacao} onChange={handleChange} />
                         </div>
 
                     </div>
@@ -125,34 +129,31 @@ function CriaProfessor() {
 
                         <div className="form-group">
                             <label>Email</label>
-                            <input 
-                                type="email"
-                                name="email"
-                                value={form.email}
-                                onChange={handleChange}
-                                placeholder="Digite o email"
-                            />
+                            <input type="email" name="email" value={form.email} onChange={handleChange} />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Senha</label>
+                            <input type="password" name="password" value={form.password} onChange={handleChange} />
                         </div>
 
                         <div className="form-group">
                             <label>Turma</label>
-                            <input 
-                                type="text"
-                                name="turma"
-                                value={form.turma}
-                                onChange={handleChange}
-                                placeholder="Digite a turma"
-                            />
+                            <select name="id_turma" value={form.id_turma} onChange={handleChange}>
+                                <option value="">Selecione</option>
+
+                                {turmas.map((turma) => (
+                                    <option key={turma.id} value={turma.id}>
+                                        {turma.nome} - {turma.turno}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="form-group">
                             <label>Status</label>
-                            <select 
-                                name="status"
-                                value={form.status}
-                                onChange={handleChange}
-                            >
-                                <option value="">Selecione status</option>
+                            <select name="status" value={form.status} onChange={handleChange}>
+                                <option value="">Selecione</option>
                                 <option value="Ativo">Ativo</option>
                                 <option value="Inativo">Inativo</option>
                             </select>
@@ -160,13 +161,12 @@ function CriaProfessor() {
 
                         <div className="form-group">
                             <label>Deficiência</label>
-                            <input 
-                                type="text"
-                                name="deficiencia"
-                                value={form.deficiencia}
-                                onChange={handleChange}
-                                placeholder="Caso tenha, descreva"
-                            />
+                            <input name="deficiencia" value={form.deficiencia} onChange={handleChange} />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Tipo de Deficiência</label>
+                            <input name="tipoDeficiencia" value={form.tipoDeficiencia} onChange={handleChange} />
                         </div>
 
                     </div>
