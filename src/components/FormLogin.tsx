@@ -27,18 +27,16 @@ function FormLogin() {
         password
       })
 
-      const token = response.data.access_token;      
-      localStorage.setItem('authToken', token);
-
 
       // Desestruturando os dados do backend
-      const { access_token, role, nome } = response.data;
+      const { access_token, role, nome, id } = response.data;
       console.log(response.data);
       
       // Salva token + tipo do usuário
       localStorage.setItem('authToken', access_token);
       localStorage.setItem('tipoUser', role);
       localStorage.setItem('userName', nome);
+      localStorage.setItem('id', id)
 
       // setMessage('Login realizado com sucesso!');
       // setEmail('');

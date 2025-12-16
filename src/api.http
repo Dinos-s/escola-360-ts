@@ -13,7 +13,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3000/turma/registro
+GET http://localhost:3000/turma/1
 content-type: application/json
 
 {

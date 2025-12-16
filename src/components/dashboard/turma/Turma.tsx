@@ -122,7 +122,6 @@ function Turma() {
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Nome</th>
                             <th>Turno</th>
                         </tr>
@@ -130,7 +129,7 @@ function Turma() {
                     <tbody>
                         {turmas.map((turma) => (
                             <tr key={turma.id}>
-                                <td>{turma.id}</td>
+                                
                                 <td>{turma.nome}</td>
                                 <td>{turma.turno}</td>
                             </tr>
