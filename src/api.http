@@ -20,3 +20,7 @@ content-type: application/json
     "nome": "9º Ano",
     "turno": "Manhã"
 }
+
+###
+
+GET http://localhost:3000/administrativo/1

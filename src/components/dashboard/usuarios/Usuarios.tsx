@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./Usuarios.css";
 
 const alunos = [
@@ -50,13 +51,6 @@ const professores = [
   }
 ];
 
-// Combinei as listas para a aba 'Todos'
-const todosUsuarios = [...alunos, ...professores];
-
-// Opções de filtro de Status (Todos, Ativo, Inativo, Pre-cadastro)
-const statusDeFiltro = ["Todos", "Ativo", "Inativo", "Pre-cadastro"];
-
-
 function Usuarios() {
   // Estado para controlar qual lista está sendo exibida/filtrada (alunos, professores, todos)
   const [perfilExibido, setPerfilExibido] = useState("todos");
@@ -66,7 +60,50 @@ function Usuarios() {
   const [perfilCadastro, setPerfilCadastro] = useState("");
 
   const [termoBusca, setTermoBusca] = useState("");
+  const [alunos, setAlunos] = useState([]);
+  const [professores, setProfessores] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(()=>{
+
+    const carregarDados = async () => {
+      setLoading(true)
+
+      try {
+        const [resAlunos, resProfessores] = await Promise.all([
+          axios.get("http://localhost:3000/aluno"),
+          axios.get("http://localhost:3000/professor"),
+        ])
+
+        // Normalização dos dados
+        const alunosFormatados = resAlunos.data.map(aluno => ({
+          ...aluno,
+          tipo: "Aluno"
+        }));
+
+        const professoresFormatados = resProfessores.data.map(prof => ({
+          ...prof,
+          tipo: "Professor"
+        }));
+
+        setAlunos(alunosFormatados)
+        setProfessores(professoresFormatados)
+
+      } catch (error) {
+        console.error("Error ao carregar Usuários", error);
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    carregarDados();
+  }, [])
+
+  // Combinei as listas para a aba 'Todos'
+  const todosUsuarios = [...alunos, ...professores];
+
+  // Opções de filtro de Status (Todos, Ativo, Inativo, Pre-cadastro)
+  const statusDeFiltro = ["Todos", "Ativo", "Inativo", "Pre-cadastro"];
 
   // Define a lista de dados base para o filtro
   const listaBase = perfilExibido === 'alunos' 
@@ -129,7 +166,7 @@ function Usuarios() {
       <table className="user-table">
         <thead>
           <tr>
-            <th>ID</th>
+            {/* <th>ID</th> */}
             <th>Nome</th>
             <th>E-mail</th>
             {tipo === 'alunos' && <th>Matrícula / Turma</th>}
@@ -141,8 +178,8 @@ function Usuarios() {
         <tbody>
           {dados.length > 0 ? (
             dados.map((usuario) => (
-              <tr key={usuario.id}>
-                <td>{usuario.id}</td>
+              <tr key={`${usuario.tipo}-${usuario.id}`}>
+                {/* <td>{usuario.id}</td> */}
                 <td>{usuario.nome}</td>
                 <td>{usuario.email}</td>
                 {/* Informações específicas de Aluno */}
