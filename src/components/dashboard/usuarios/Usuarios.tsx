@@ -51,6 +51,39 @@ const professores = [
   }
 ];
 
+// Aluno
+interface Aluno {
+  id: number;
+  nome: string;
+  email: string;
+  password?: string;
+  cpf: string;
+  matricula: string;
+  status: string;
+  deficiencia: string;
+  tipoDeficiencia?: string;
+  dataNasc: string;
+  tipo: "Aluno";
+}
+
+// Professor
+interface Professor {
+  id: number;
+  nome: string;
+  email: string;
+  password?: string;
+  cpf: string;
+  matricula: string;
+  status: string;
+  dataAdmissao: string;
+  formacaoAcad: string;
+  titulacao: string;
+  deficiencia: string;
+  tipoDeficiencia?: string;
+  tipo: "Professor";
+}
+
+
 function Usuarios() {
   // Estado para controlar qual lista está sendo exibida/filtrada (alunos, professores, todos)
   const [perfilExibido, setPerfilExibido] = useState("todos");
@@ -60,8 +93,8 @@ function Usuarios() {
   const [perfilCadastro, setPerfilCadastro] = useState("");
 
   const [termoBusca, setTermoBusca] = useState("");
-  const [alunos, setAlunos] = useState([]);
-  const [professores, setProfessores] = useState([]);
+  const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [professores, setProfessores] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(()=>{
@@ -150,7 +183,7 @@ function Usuarios() {
   };
   
   // Função para lidar com a TABELA de exibição
-  const handleAbaChange = (tipo) => {
+  const handleAbaChange = (tipo:string) => {
     setPerfilExibido(tipo.toLowerCase());
     setFiltroStatus("Todos");
     setTermoBusca(""); // Resetar busca ao mudar de aba
@@ -159,6 +192,37 @@ function Usuarios() {
   const handleBuscaChange = (e) => {
     setTermoBusca(e.target.value);
   };
+
+  const handleInativar = async (id: number, tipo: string, statusAtual: string) => {
+  try {
+    const novoStatus = statusAtual === "Ativo" ? "Inativo" : "Ativo";
+
+    const endpoint =
+      tipo === "Aluno"
+        ? `http://localhost:3000/aluno/${id}/status`
+        : `http://localhost:3000/professor/${id}/status`;
+
+    await axios.patch(endpoint, { status: novoStatus });
+
+    if (tipo === "Aluno") {
+      setAlunos(prev =>
+        prev.map(u =>
+          u.id === id ? { ...u, status: novoStatus } : u
+        )
+      );
+    } else {
+      setProfessores(prev =>
+        prev.map(u =>
+          u.id === id ? { ...u, status: novoStatus } : u
+        )
+      );
+    }
+
+  } catch (error) {
+    console.error("Erro ao alterar status do usuário", error);
+  }
+};
+
   
   // Componente auxiliar para renderizar a tabela
   const TabelaDeUsuarios = ({ dados, tipo }) => (
@@ -170,7 +234,7 @@ function Usuarios() {
             <th>Nome</th>
             <th>E-mail</th>
             {tipo === 'alunos' && <th>Matrícula / Turma</th>}
-            {tipo === 'professores' && <th>Disciplina</th>}
+            {/* {tipo === 'professores' && <th>Disciplina</th>} */}
             <th>Status</th>
             <th>Ações</th>
           </tr>
@@ -189,7 +253,7 @@ function Usuarios() {
                   </td>
                 }
                 {/* Informações específicas de Professor */}
-                {tipo === 'professores' && <td>{usuario.disciplina}</td>}
+                {/* {tipo === 'professores' && <td>{usuario.disciplina}</td>} */}
                 
                 <td>
                   <span className={`status status-${usuario.status.toLowerCase().replace('-', '')}`}>{usuario.status}</span>
@@ -197,7 +261,11 @@ function Usuarios() {
                 <td>
                   <div className="acoes">
                     <button className="action-btn edit-btn">Editar</button>
-                    <button className="action-btn delete-btn">Inativar</button>
+                    <button 
+                    className="action-btn delete-btn" 
+                    onClick={() => handleInativar(usuario.id, usuario.tipo, usuario.status)}>
+                      {usuario.status === "Ativo" ? "Inativar" : "Ativar"}
+                    </button>
                   </div>
                 </td>
               </tr>

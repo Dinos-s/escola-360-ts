@@ -242,7 +242,7 @@ function Disciplina() {
                                 codDisciplina: e.target.value.toUpperCase(),
                                 })
                             }
-                            placeholder="Ex: MAT-001"
+                            placeholder="Ex: MAT001"
                             required
                             />
                         </div>
