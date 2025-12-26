@@ -34,6 +34,12 @@ function TrocaSenha() {
             return;
         }
 
+        if (form.novaSenha.length < 6) {
+            setMensagem('A nova senha deve ter pelo menos 6 caracteres.');
+            setTipoMensagem('error');
+            return;
+        }
+
         try {
             await axios.patch(
                 `http://localhost:3000/${tipoUser}/${userId}/password`,

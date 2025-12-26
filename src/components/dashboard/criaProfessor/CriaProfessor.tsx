@@ -54,9 +54,13 @@ function CriaProfessor() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         setError('');
         setMessage('');
+
+        if (form.password.length < 6) {
+            setError("A senha deve ter pelo menos 6 caracteres.");
+            return;
+        }
 
         try {
             const response = await axios.post(
@@ -159,7 +163,7 @@ function CriaProfessor() {
 
                         <div className="form-group">
                             <label>Nome completo</label>
-                            <input name="nome" placeholder='Digite o nome do professor' value={form.nome} onChange={handleChange} />
+                            <input name="nome" placeholder='Digite o nome do professor' value={form.nome} onChange={handleChange} required />
                         </div>
 
                         <div className="form-group">
@@ -171,30 +175,31 @@ function CriaProfessor() {
                                 value={form.cpf}
                                 onChange={handleChange}
                                 className={cpfError ? "error" : ""}
+                                required
                             />
                             {cpfError && <span className='spanErro'>{cpfError}</span>}
                         </div>
 
                         <div className="form-group">
                             <label>Matrícula</label>
-                            <input name="matricula" placeholder='Digite a matrícula do professor' value={form.matricula} onChange={handleChange} />
+                            <input name="matricula" placeholder='Digite a matrícula do professor' value={form.matricula} onChange={handleChange} required />
                         </div>
 
                         <div className="form-group">
                             <label>E-mail</label>
                             <input type="email"
-                            placeholder='E-mail do professor' name="email" value={form.email} onChange={handleChange} />
+                            placeholder='E-mail do professor' name="email" value={form.email} onChange={handleChange} required />
                         </div>
 
                         <div className="form-group">
                             <label>Data de Admissão</label>
-                            <input type="date" name="dataAdmissao" value={form.dataAdmissao} onChange={handleChange} />
+                            <input type="date" name="dataAdmissao" value={form.dataAdmissao} onChange={handleChange} required />
                         </div>
 
                         <div className="form-group">
                             <label>Formação Acadêmica</label>
                             <input name="formacaoAcad"
-                            placeholder='Formação Acadêmica do professor' value={form.formacaoAcad} onChange={handleChange} />
+                            placeholder='Formação Acadêmica do professor' value={form.formacaoAcad} onChange={handleChange} required />
                         </div>
                     </div>
 
@@ -203,7 +208,7 @@ function CriaProfessor() {
 
                         <div className="form-group">
                             <label>Titulação</label>
-                            <input name="titulacao" placeholder='Titulação do professor' value={form.titulacao} onChange={handleChange} />
+                            <input name="titulacao" placeholder='Titulação do professor' value={form.titulacao} onChange={handleChange} required />
                         </div>
 
                         {/* <div className="form-group">
@@ -221,7 +226,7 @@ function CriaProfessor() {
 
                         <div className="form-group">
                             <label>Status</label>
-                            <select name="status" value={form.status} onChange={handleChange}>
+                            <select name="status" value={form.status} onChange={handleChange} required>
                                 <option value="">Selecione</option>
                                 <option value="Ativo">Ativo</option>
                                 <option value="Inativo">Inativo</option>
@@ -230,7 +235,7 @@ function CriaProfessor() {
 
                         <div className="form-group">
                             <label>Deficiência</label>
-                            <select name="deficiencia" value={form.deficiencia} onChange={handleChange}>
+                            <select name="deficiencia" required value={form.deficiencia} onChange={handleChange}>
                                 <option value="">Selecione</option>
                                 <option value="Sim">Sim</option>
                                 <option value="Não">Não</option>
@@ -252,13 +257,14 @@ function CriaProfessor() {
                                         ? "cursor-not-allowed bg-gray-100 opacity-50 text-gray-400"
                                         : "cursor-text bg-white"}
                                 `}
+                                required={form.deficiencia === 'Sim'}
                             />
                         </div>
 
                         <div className="form-group">
                             <label>Senha</label>
                             <input type="password" 
-                            placeholder='Digite a senha do Professor' name="password" value={form.password} onChange={handleChange} />
+                            placeholder='Digite a senha do Professor' name="password" value={form.password} onChange={handleChange} required />
                         </div>
 
                     </div>

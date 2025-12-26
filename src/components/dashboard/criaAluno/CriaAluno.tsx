@@ -59,6 +59,11 @@ function CriaAluno() {
             return;
         }
 
+        if (form.password.length < 6) {
+            setError("A senha deve ter pelo menos 6 caracteres.");
+            return;
+        }
+
         try {
             const response = await axios.post(
                 'http://localhost:3000/aluno/registro', form
@@ -163,6 +168,7 @@ function CriaAluno() {
                                 placeholder='Digite o nome completo do Aluno'
                                 value={form.nome}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
 
@@ -175,6 +181,7 @@ function CriaAluno() {
                                 value={form.cpf}
                                 onChange={handleChange}
                                 className={cpfError ? "error" : ""}
+                                required
                             />
                             {cpfError && <span className='spanErro'>{cpfError}</span>}
                         </div>
@@ -187,6 +194,7 @@ function CriaAluno() {
                                 placeholder="Digite a matrícula do Aluno"
                                 value={form.matricula}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
 
@@ -198,6 +206,7 @@ function CriaAluno() {
                                 placeholder='E-mail do Aluno'
                                 value={form.email}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
 
@@ -208,6 +217,7 @@ function CriaAluno() {
                                 name="dataNasc"
                                 value={form.dataNasc}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                     </div>
@@ -237,6 +247,7 @@ function CriaAluno() {
                                 name="status"
                                 value={form.status}
                                 onChange={handleChange}
+                                required
                             >
                                 <option value="">Selecione</option>
                                 <option value="Ativo">Ativo</option>
@@ -262,6 +273,7 @@ function CriaAluno() {
                                 value={form.tipoDeficiencia}
                                 onChange={handleChange}
                                 disabled={form.deficiencia !== 'Sim'}
+                                required
                                 className={`
                                     border rounded px-3 py-2 w-full
                                     ${form.deficiencia !== "Sim"
@@ -279,6 +291,7 @@ function CriaAluno() {
                                 placeholder='Senha de acesso do Aluno'
                                 value={form.password}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                     </div>

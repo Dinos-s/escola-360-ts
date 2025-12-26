@@ -1,9 +1,10 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Perfil.css';
 import axios from 'axios';
 
 function Perfil() {
-
+    const [mensagem, setMensagem] = useState('');
+    const [tipoMensagem, setTipoMensagem] = useState<'success' | 'error' | ''>('');
     const userId = localStorage.getItem('id');
     const token = localStorage.getItem('authToken');
     let tipoUser = localStorage.getItem('tipoUser');
@@ -31,14 +32,18 @@ function Perfil() {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => {
-            
+        .then(response => {     
             setForm({
                 nome: response.data.nome,
                 dataNasc: response.data.dataNasc?.split('T')[0],
                 cpf: response.data.cpf,
                 email: response.data.email
             });
+
+            // Atualiza nome no localStorage
+            if (response.data.nome) {
+                localStorage.setItem('userName', response.data.nome);
+            }
         })
         .catch(error => {
             console.error('Erro ao buscar perfil:', error);
@@ -52,18 +57,27 @@ function Perfil() {
         }));
     };
 
+    const cleanForm = Object.fromEntries(
+        Object.entries(form).filter(
+            ([_, value]) => value !== '' && value !== null
+        )
+    );
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        axios.patch(`http://localhost:3000/${tipoUser}/${userId}`, form, {
+        axios.patch(`http://localhost:3000/${tipoUser}/${userId}`, cleanForm, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
         .then(response => {
-            console.log('Perfil atualizado com sucesso:', response.data);
+            setMensagem('Perfil atualizado com sucesso!');
+            setTipoMensagem('success');
         })
         .catch(error => {
             console.error('Erro ao atualizar perfil:', error);
+            setMensagem('Erro ao atualizar perfil!');
+            setTipoMensagem('error');
         });
     };
     
@@ -104,69 +118,74 @@ function Perfil() {
     // );
 
     return (
-    <div className="main-container">
-        <h1 className="profile-title">Perfil</h1>
+        <div className="main-container">
+            <h1 className="profile-title">Perfil</h1>
+            {mensagem && (
+                    <p className={`feedback-message ${tipoMensagem}`}>
+                        {mensagem}
+                    </p>
+            )}
 
-        <form onSubmit={handleSubmit}>
-            <div className="column">
-                <div className="form-group">
-                    <label>Nome Completo</label>
-                    <input
-                        type="text"
-                        name="nome"
-                        value={form.nome}
-                        onChange={handleChange}
-                    />
+            <form onSubmit={handleSubmit}>
+                <div className="column">
+                    <div className="form-group">
+                        <label>Nome Completo</label>
+                        <input
+                            type="text"
+                            name="nome"
+                            value={form.nome}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Data de Nascimento</label>
+                        
+                        <input
+                            type="date"
+                            name="dataNasc"
+                            value={(form.dataNasc)}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>CPF</label>
+                        <input
+                            type="text"
+                            name="cpf"
+                            value={form.cpf}
+                            readOnly
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={form.email}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="action-buttons">
+                        <button type="submit" className="save-btn">
+                            Salvar Alterações
+                        </button>
+
+                        <button
+                            type="button"
+                            className="cancel-btn"
+                            onClick={() => window.location.reload()}
+                        >
+                            Cancelar
+                        </button>
+                    </div>
                 </div>
-
-                <div className="form-group">
-                    <label>Data de Nascimento</label>
-                    
-                    <input
-                        type="date"
-                        name="dataNasc"
-                        value={(form.dataNasc)}
-                        onChange={handleChange}
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>CPF</label>
-                    <input
-                        type="text"
-                        name="cpf"
-                        value={form.cpf}
-                        readOnly
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                    />
-                </div>
-
-                <div className="action-buttons">
-                    <button type="submit" className="save-btn">
-                        Salvar Alterações
-                    </button>
-
-                    <button
-                        type="button"
-                        className="cancel-btn"
-                        onClick={() => window.location.reload()}
-                    >
-                        Cancelar
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-);
+            </form>
+        </div>
+    );
 
 }
 
