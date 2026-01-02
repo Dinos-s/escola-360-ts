@@ -72,10 +72,11 @@
   transform: scale(0.97);
 }
 
-.tabela-disciplina{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.tabela-disciplina {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .btn-cancelar {
   background-color: #999;
