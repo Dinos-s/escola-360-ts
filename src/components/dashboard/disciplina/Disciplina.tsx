@@ -1,89 +1,92 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./Disciplina.css";
 
-const professoresDisponiveis = [
-    { value: "", label: "Selecione um professor" },
-    { value: "prof1", label: "João Silva" },
-    { value: "prof2", label: "Maria Santos" },
-    { value: "prof3", label: "Carlos Oliveira" },
-];
+// const professoresDisponiveis = [
+//     { value: "", label: "Selecione um professor" },
+//     { value: "prof1", label: "João Silva" },
+//     { value: "prof2", label: "Maria Santos" },
+//     { value: "prof3", label: "Carlos Oliveira" },
+// ];
 
-<<<<<<< Updated upstream
 const statusOptions = [
     { value: "ativa", label: "Ativa" },
     { value: "inativa", label: "Inativa" },
 ];
-=======
 // const statusOptions = [
 //     { value: "ativa", label: "Ativa" },
 //     { value: "inativa", label: "Inativa" },
 // ];
 interface Disciplina {
-  id: number;
-  nome: string;
-  codDisciplina: string;
-  cargaHoraria: number;
-  status: "ativa" | "inativa";
-  assunto: string;
+    id: number;
+    nome: string;
+    codDisciplina: string;
+    cargaHoraria: number;
+    status: "ativa" | "inativa";
+    assunto: string;
 }
 
 interface DisciplinaForm {
-  nome: string;
-  codDisciplina: string;
-  cargaHoraria: string;
-  status: "ativa" | "inativa";
-  assunto: string;
+    nome: string;
+    codDisciplina: string;
+    cargaHoraria: string;
+    status: "ativa" | "inativa";
+    assunto: string;
 }
 
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+    baseURL: 'http://localhost:3000',
 });
->>>>>>> Stashed changes
 
 function Disciplina() {
   const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
 
-<<<<<<< Updated upstream
     const [disciplinas, setDisciplinas] = useState([
         { id: "1", nome: "Matemática", codigo: "MAT001", cargaHoraria: 80, professor: "João Silva", status: "ativa" },
         { id: "2", nome: "Português", codigo: "POR001", cargaHoraria: 80, professor: "Maria Santos", status: "ativa" },
         { id: "3", nome: "História", codigo: "HIS001", cargaHoraria: 60, professor: "Carlos Oliveira", status: "ativa" },
     ]);
 
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<DisciplinaForm>({
         nome: "",
-        codigo: "",
+        codDisciplina: "",
         cargaHoraria: "",
-        professor: "",
-        status: "",
-        habilidade: "",
+        status: "ativa",
+        assunto: "",
     });
 
-    const generateCodigo = () => {
-        const prefix = form.nome.substring(0, 3).toUpperCase() || "DIS";
+    useEffect(() => { carregarDisciplinas() })
+
+    const carregarDisciplinas = async () => {
+        const { data } = await api.get<Disciplina[]>('/disciplina');
+        setDisciplinas(data);
+    }
+
+    const gerarCodigo = (nome: string) => {
+        const prefixo = nome.substring(0, 3).toUpperCase() || "DIS";
         const numero = String(disciplinas.length + 1).padStart(3, "0");
-        return `${prefix}${numero}`;
+        return `${prefixo}${numero}`;
     };
 
-    const codigo = form.codigo || generateCodigo();
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
         const { name, value } = e.target;
-        setForm({ ...form, [name]: value });
-    }
 
-    const handleSubmit = (e: React.FormEvent) => {
+        setForm((prev) => ({
+            ...prev,
+            [name]: value,
+            codDisciplina: name === "nome" ? gerarCodigo(value) : prev.codDisciplina,
+        }));
+    };
+
+    /* =======================
+       SUBMIT
+    ======================= */
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
     }
-=======
-  const [form, setForm] = useState<DisciplinaForm>({
-    nome: "",
-    codDisciplina: "",
-    cargaHoraria: "",
-    status: "ativa",
-    assunto: "",
-  });
 
   useEffect(() => {
     carregarDisciplinas();
@@ -175,7 +178,6 @@ function Disciplina() {
     });
     carregarDisciplinas();
   };
->>>>>>> Stashed changes
 
   // return (
   //     <div className="main-container">
@@ -216,35 +218,19 @@ function Disciplina() {
   //                     />
   //                 </div>
 
-<<<<<<< Updated upstream
     //                 <div className="form-group">
     //                     <label>Professor Responsável</label>
     //                     <select
     //                         name="professorResponsavel"
     //                         value={form.professor}
     //                         onChange={handleChange}>
-    //                         {professoresDisponiveis.map((professor) => (
+    //                         {professores.map((professor) => (
     //                             <option key={professor.value} value={professor.value}>
     //                                 {professor.label}
     //                             </option>
     //                         ))}
     //                     </select>
     //                 </div>
-=======
-  //                 <div className="form-group">
-  //                     <label>Professor Responsável</label>
-  //                     <select
-  //                         name="professorResponsavel"
-  //                         value={form.professor}
-  //                         onChange={handleChange}>
-  //                         {professores.map((professor) => (
-  //                             <option key={professor.value} value={professor.value}>
-  //                                 {professor.label}
-  //                             </option>
-  //                         ))}
-  //                     </select>
-  //                 </div>
->>>>>>> Stashed changes
 
   //                 <div className="form-group">
   //                     <label>Status da Disciplina</label>
@@ -271,27 +257,12 @@ function Disciplina() {
         {editId ? "Atualizar Disciplina" : "Criar Disciplina"}
       </h1>
 
-<<<<<<< Updated upstream
     return (
         <div className="main-container">
             <h1 className="disciplina-title">Criar Disciplina</h1>
-=======
-      {/* ---------------- FORM ---------------- */}
-      <form onSubmit={handleSubmit}>
-        <div className="disciplina-form">
-          <div className="card-fields">
-            <div className="column">
-              <div className="form-group">
-                <label>Nome da Disciplina</label>
-                <input
-                  type="text"
-                  name="nome"
-                  placeholder="Digite o nome da disciplina"
-                  value={form.nome}
-                  onChange={handleChange}
-                />
-              </div>
->>>>>>> Stashed changes
+            <h1 className="disciplina-title">
+                {editId ? "Atualizar Disciplina" : "Criar Disciplina"}
+            </h1>
 
               <div className="form-group">
                 <label>Código da Disciplina</label>
@@ -310,16 +281,20 @@ function Disciplina() {
                 />
               </div>
 
-<<<<<<< Updated upstream
                         <div className="form-group">
                             <label>Código da Disciplina</label>
                             <input
-                                type="text"
-                                name="codigo"
-                                disabled
-                                placeholder="O código é gerado automaticamente"
-                                value={codigo}
-                                onChange={handleChange}
+                            type="text"
+                            name="codDisciplina"
+                            value={form.codDisciplina}
+                            onChange={(e) =>
+                                setForm({
+                                ...form,
+                                codDisciplina: e.target.value.toUpperCase(),
+                                })
+                            }
+                            placeholder="Ex: MAT001"
+                            required
                             />
                         </div>
 
@@ -337,37 +312,23 @@ function Disciplina() {
 
                     <div className="column">
                         <div className="form-group">
-=======
-              <div className="form-group">
-                <label>Carga Horária</label>
-                <input
-                  type="number"
-                  name="cargaHoraria"
-                  placeholder="Digite a carga horária"
-                  value={form.cargaHoraria}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
 
-            <div className="column">
-              {/* <div className="form-group">
->>>>>>> Stashed changes
+                        {/* <div className="form-group">
                             <label>Professor Responsável</label>
                             <select
                                 name="professor"
-                                value={form.professor}
+                                value={form.professorId}
                                 onChange={handleChange}
                             >
-                                {professoresDisponiveis.map((p) => (
-                                    <option key={p.value} value={p.value}>
-                                        {p.label}
+                                <option value="">Selecione um professor</option>
+                                {professores.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.nome}
                                     </option>
                                 ))}
                             </select>
-                        </div>
+                        </div> */}
 
-<<<<<<< Updated upstream
                         <div className="form-group">
                             <label>Status da Disciplina</label>
                             <select
@@ -375,30 +336,35 @@ function Disciplina() {
                                 value={form.status}
                                 onChange={handleChange}
                             >
-                                {statusOptions.map((s) => (
-                                    <option key={s.value} value={s.value}>
-                                        {s.label}
-                                    </option>
-                                ))}
+                                <option value="ativa">Ativa</option>
+                                <option value="inativa">Inativa</option>
                             </select>
                         </div>
 
                         <div className="form-group" style={{ gridColumn: "1 / -1" }}>
-                            <label>Habilidade da Disciplina</label>
+                            <label>Assunto da Disciplina</label>
                             <input
-                            type="text"
-                            name="habilidade"
-                            placeholder="Ex: Geometria, Gramática, Idade Média..."
-                            value={form.habilidade}
-                            onChange={handleChange}
+                                type="text"
+                                name="assunto"
+                                placeholder="Ex: Geometria, Gramática, Idade Média..."
+                                value={form.assunto}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
                 </div>
 
                 <button type="submit" className="btn-salvar">
-                    Salvar Disciplina
+                    {editId ? "Atualizar Disciplina" : "Salvar Disciplina"}
                 </button>
+                
+                    <button
+                    type="button"
+                    className="btn-cancelar"
+                    onClick={handleCancelar}
+                    >
+                    Cancelar
+                    </button>
             </form>
 
             {/* ---------------- TABELA ---------------- */}
@@ -411,54 +377,30 @@ function Disciplina() {
                             <th>Código</th>
                             <th>Nome</th>
                             <th>Carga Horária</th>
-                            <th>Professor</th>
                             <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         {disciplinas.map((d) => (
-                            <tr key={d.codigo}>
-                                <td>{d.codigo}</td>
+                            <tr key={d.codDisciplina}>
+                                <td>{d.codDisciplina}</td>
                                 <td>{d.nome}</td>
-                                <td>{d.cargaHoraria}h</td>
-                                <td>{d.professor}</td>
+                                <td>{d.cargaHoraria}</td>
                                 <td>{d.status}</td>
 
                                 <td>
                                     <div className="acoes">
-                                        <button className="action-btn edit-btn">Editar</button>
-                                        <button className="action-btn delete-btn">Inativar</button>
+                                        <button onClick={() => handleEdit(d)} className="action-btn edit-btn">Editar</button>
+                                        <button onClick={() => handleInativar(d)} className="action-btn delete-btn">
+                                            {d.status === "ativa" ? "Inativar" : "Ativar"}
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-=======
-              <div className="form-group">
-                <label>Status da Disciplina</label>
-                <select
-                  name="status"
-                  value={form.status}
-                  onChange={handleChange}
-                >
-                  <option value="ativa">Ativa</option>
-                  <option value="inativa">Inativa</option>
-                </select>
-              </div>
-
-              <div className="form-group" style={{ gridColumn: "1 / -1" }}>
-                <label>Assunto da Disciplina</label>
-                <input
-                  type="text"
-                  name="assunto"
-                  placeholder="Ex: Geometria, Gramática, Idade Média..."
-                  value={form.assunto}
-                  onChange={handleChange}
-                />
-              </div>
->>>>>>> Stashed changes
             </div>
           </div>
 

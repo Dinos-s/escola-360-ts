@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./Usuarios.css";
 
 const alunos = [
@@ -50,11 +51,37 @@ const professores = [
   },
 ];
 
-// Combinei as listas para a aba 'Todos'
-const todosUsuarios = [...alunos, ...professores];
+// Aluno
+interface Aluno {
+  id: number;
+  nome: string;
+  email: string;
+  password?: string;
+  cpf: string;
+  matricula: string;
+  status: string;
+  deficiencia: string;
+  tipoDeficiencia?: string;
+  dataNasc: string;
+  tipo: "Aluno";
+}
 
-// Opções de filtro de Status (Todos, Ativo, Inativo, Pre-cadastro)
-const statusDeFiltro = ["Todos", "Ativo", "Inativo", "Pre-cadastro"];
+// Professor
+interface Professor {
+  id: number;
+  nome: string;
+  email: string;
+  password?: string;
+  cpf: string;
+  matricula: string;
+  status: string;
+  dataAdmissao: string;
+  formacaoAcad: string;
+  titulacao: string;
+  deficiencia: string;
+  tipoDeficiencia?: string;
+  tipo: "Professor";
+}
 
 function Usuarios() {
   // Estado para controlar qual lista está sendo exibida/filtrada (alunos, professores, todos)
@@ -65,48 +92,49 @@ function Usuarios() {
   const [perfilCadastro, setPerfilCadastro] = useState("");
 
   const [termoBusca, setTermoBusca] = useState("");
+  const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [professores, setProfessores] = useState<Professor[]>([]);
+  const [loading, setLoading] = useState(false);
 
-<<<<<<< Updated upstream
-=======
-  useEffect(() => {
+  useEffect(()=>{
+
     const carregarDados = async () => {
-      setLoading(true);
+      setLoading(true)
 
       try {
         const [resAlunos, resProfessores] = await Promise.all([
           axios.get("http://localhost:3000/aluno"),
           axios.get("http://localhost:3000/professor"),
-        ]);
+        ])
 
         // Normalização dos dados
-        const alunosFormatados = resAlunos.data.map((aluno) => ({
+        const alunosFormatados = resAlunos.data.map(aluno => ({
           ...aluno,
-          tipo: "Aluno",
+          tipo: "Aluno"
         }));
 
-        const professoresFormatados = resProfessores.data.map((prof) => ({
+        const professoresFormatados = resProfessores.data.map(prof => ({
           ...prof,
-          tipo: "Professor",
+          tipo: "Professor"
         }));
 
-        setAlunos(alunosFormatados);
-        setProfessores(professoresFormatados);
+        setAlunos(alunosFormatados)
+        setProfessores(professoresFormatados)
+
       } catch (error) {
         console.error("Error ao carregar Usuários", error);
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    carregarDados();
-  }, []);
 
   // Combinei as listas para a aba 'Todos'
   const todosUsuarios = [...alunos, ...professores];
 
   // Opções de filtro de Status (Todos, Ativo, Inativo, Pre-cadastro)
   const statusDeFiltro = ["Todos", "Ativo", "Inativo", "Pre-cadastro"];
->>>>>>> Stashed changes
+
 
   // Define a lista de dados base para o filtro
   const listaBase =
@@ -157,11 +185,7 @@ function Usuarios() {
   };
 
   // Função para lidar com a TABELA de exibição
-<<<<<<< Updated upstream
   const handleAbaChange = (tipo) => {
-=======
-  const handleAbaChange = (tipo: string) => {
->>>>>>> Stashed changes
     setPerfilExibido(tipo.toLowerCase());
     setFiltroStatus("Todos");
     setTermoBusca(""); // Resetar busca ao mudar de aba
@@ -170,9 +194,7 @@ function Usuarios() {
   const handleBuscaChange = (e) => {
     setTermoBusca(e.target.value);
   };
-<<<<<<< Updated upstream
   
-=======
 
   const handleInativar = async (
     id: number,
@@ -203,23 +225,18 @@ function Usuarios() {
     }
   };
 
->>>>>>> Stashed changes
   // Componente auxiliar para renderizar a tabela
   const TabelaDeUsuarios = ({ dados, tipo }) => (
     <div className="table-responsive-users">
       <table className="user-table">
         <thead>
           <tr>
-            <th>ID</th>
+            {/* <th>ID</th> */}
             <th>Nome</th>
             <th>E-mail</th>
-<<<<<<< Updated upstream
             {tipo === 'alunos' && <th>Matrícula / Turma</th>}
             {tipo === 'professores' && <th>Disciplina</th>}
-=======
-            {tipo === "alunos" && <th>Matrícula / Turma</th>}
             {/* {tipo === 'professores' && <th>Disciplina</th>} */}
->>>>>>> Stashed changes
             <th>Status</th>
             <th>Ações</th>
           </tr>
@@ -227,8 +244,8 @@ function Usuarios() {
         <tbody>
           {dados.length > 0 ? (
             dados.map((usuario) => (
-              <tr key={usuario.id}>
-                <td>{usuario.id}</td>
+              <tr key={`${usuario.tipo}-${usuario.id}`}>
+                {/* <td>{usuario.id}</td> */}
                 <td>{usuario.nome}</td>
                 <td>{usuario.email}</td>
                 {/* Informações específicas de Aluno */}
@@ -238,13 +255,11 @@ function Usuarios() {
                   </td>
                 )}
                 {/* Informações específicas de Professor */}
-<<<<<<< Updated upstream
                 {tipo === 'professores' && <td>{usuario.disciplina}</td>}
                 
-=======
+
                 {/* {tipo === 'professores' && <td>{usuario.disciplina}</td>} */}
 
->>>>>>> Stashed changes
                 <td>
                   <span
                     className={`status status-${usuario.status
@@ -257,18 +272,13 @@ function Usuarios() {
                 <td>
                   <div className="acoes">
                     <button className="action-btn edit-btn">Editar</button>
-<<<<<<< Updated upstream
                     <button className="action-btn delete-btn">Inativar</button>
-=======
-                    <button
-                      className="action-btn delete-btn"
-                      onClick={() =>
-                        handleInativar(usuario.id, usuario.tipo, usuario.status)
-                      }
-                    >
+
+                    <button 
+                    className="action-btn delete-btn" 
+                    onClick={() => handleInativar(usuario.id, usuario.tipo, usuario.status)}>
                       {usuario.status === "Ativo" ? "Inativar" : "Ativar"}
                     </button>
->>>>>>> Stashed changes
                   </div>
                 </td>
               </tr>

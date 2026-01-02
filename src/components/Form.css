@@ -120,7 +120,6 @@ body {
 
 /* Botão */
 .btn-login {
-<<<<<<< Updated upstream
     background-color: #F59E0B;
     color: #F9FAFB;
     width: 40%;
@@ -132,21 +131,8 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
-=======
-  background-color: #f59e0b;
-  color: #f9fafb;
-  width: 40%;
-  letter-spacing: 2px;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 
-  margin: 15px 0;
->>>>>>> Stashed changes
+    margin: 15px 0;
 }
 
 .btn-login:hover {
@@ -197,11 +183,7 @@ body {
 }
 
 .error {
-<<<<<<< Updated upstream
     color: #FF0000;
-}
-=======
-  color: #ff0000;
 }
 
 /* Para envolver o input e o botão toggle */
@@ -234,4 +216,3 @@ body {
 .password-toggle-btn:focus {
   outline: none; /* Remove o contorno ao focar */
 }
->>>>>>> Stashed changes
