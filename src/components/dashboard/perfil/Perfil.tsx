@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import './Perfil.css';
 import axios from 'axios';
 
@@ -186,7 +185,6 @@ function Perfil() {
             </form>
         </div>
     );
-
 }
 
 export default Perfil;

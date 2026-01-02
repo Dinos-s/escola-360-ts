@@ -1,7 +1,3 @@
-import { useState } from 'react';
-import axios from 'axios';
-import './TrocaSenha.css';
-    
 function TrocaSenha() {
     const userId = localStorage.getItem('id');
     const token = localStorage.getItem('authToken');
@@ -105,9 +101,52 @@ function TrocaSenha() {
                     >
                         Cancelar</button>
                 </div>
-            </form>
+            </div>
         </div>
-    )
+
+        <div className="form-group">
+          <label htmlFor="novaSenha">Nova Senha</label>
+          <input
+            type="password"
+            placeholder="********"
+            id="novaSenha"
+            name="novaSenha"
+            value={form.novaSenha}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="confirmarSenha">Confirmar Senha</label>
+          <input
+            type="password"
+            placeholder="********"
+            id="confirmarSenha"
+            name="confirmarSenha"
+            value={form.confirmarSenha}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="action-buttons">
+          <button type="submit" className="save-btn">
+            Trocar Senha
+          </button>
+          <button
+            type="button"
+            className="cancel-btn"
+            onClick={() =>
+              setForm({ senhaAtual: "", novaSenha: "", confirmarSenha: "" })
+            }
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }
 
-export default TrocaSenha
+export default TrocaSenha;

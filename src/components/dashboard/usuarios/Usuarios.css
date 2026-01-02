@@ -1,11 +1,18 @@
 /* Container geral */
 .container {
-  margin: 40px auto;
+  /* margin: 40px auto; */
   background: #ffffff;
   padding: 25px;
   border-radius: 12px;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+.container h1 {
+  font-size: 2.5em;
+  font-weight: 600;
+  color: var(--cor-principal);
+  margin-bottom: 30px;
 }
 
 /* Descrição */
@@ -73,7 +80,7 @@
   min-width: 150px;
   appearance: none;
   /* Remove o estilo padrão do navegador */
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4L150.3%20206.5c-4.7%204.7-12.3%204.7-17%200L5.4%2069.4c-4.7-4.7-4.7-12.3%200-17l17-17c4.7-4.7%2012.3-4.7%2017%200l108.9%20108.9c4.7%204.7%2012.3%204.7%2017%200L270%2035.4c4.7-4.7%2012.3-4.7%2017%200l17%2017c4.7%204.7%204.7%2012.3%200%2017z%22%2F%3E%3C%2Fsvg%3E');
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4L150.3%20206.5c-4.7%204.7-12.3%204.7-17%200L5.4%2069.4c-4.7-4.7-4.7-12.3%200-17l17-17c4.7-4.7%2012.3-4.7%2017%200l108.9%20108.9c4.7%204.7%2012.3%204.7%2017%200L270%2035.4c4.7-4.7%2012.3-4.7%2017%200l17%2017c4.7%204.7%204.7%2012.3%200%2017z%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   background-position: right 10px top 50%;
   background-size: 12px;
@@ -115,7 +122,7 @@
   /* border: none; */
   border-radius: 12px;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
   font-size: 15px;
 }
 

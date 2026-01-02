@@ -3,3 +3,10 @@
   /* background-color: blue; */
   height: 50rem;
 }
+
+.grafico h2 {
+  font-size: 2.5em;
+  font-weight: 600;
+  color: var(--cor-principal);
+  margin-bottom: 30px;
+}
