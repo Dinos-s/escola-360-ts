@@ -1,125 +1,126 @@
 body {
-    font-family: "Poppins", sans-serif;
-    background-color: #f2f2f2;
-    margin: 0;
-    padding: 0;
-    /*  */
+  font-family: "Poppins", sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+  /*  */
 }
 
 /* Centralizar o card login */
 .form-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+    height: 100vh;
 }
 
 .logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .logo img {
-    width: 15em;
-    margin-bottom: 5px;
+  width: 15em;
+  margin-bottom: 5px;
 }
 
 /* Card de login */
 .login-card {
-    background-color: #17729B;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 561px;
+  background-color: #17729b;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 561px;
 }
 
 .login-card h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff;
 }
 
 .tipoUser-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  align-items: center;
 }
 
 .tipoUser-label {
-    color: #fff;
-    font-weight: 500;
-    font-size: 1.3em;
-    margin-bottom: 5px;
-    text-align: left;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.3em;
+  margin-bottom: 5px;
+  text-align: left;
 }
 
 /* Container dos radio buttons */
 .radio-options {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 /* Label de cada opção */
 .radio-label {
-    display: flex;
-    cursor: pointer;
-    color: #fff;
-    font-size: 16px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    background-color: transparent;
-    transition: background-color 0.3s;
+  display: flex;
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: transparent;
+  transition: background-color 0.3s;
 }
 
 /* Estado selecionado */
 .radio-label.selected {
-    background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Hover effect */
 .radio-label:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Input radio customizado */
 .radio-input {
-    margin-right: 8px;
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
-    accent-color: #F59E0B; /* Cor laranja para combinar com o botão */
+  margin-right: 8px;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: #f59e0b; /* Cor laranja para combinar com o botão */
 }
 
 .input-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .input-group label {
-    color: #fff;
-    font-weight: 500;
-    font-size: 1.3em;
-    margin-bottom: 5px;
-    text-align: left;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.3em;
+  margin-bottom: 5px;
+  text-align: left;
 }
 
 .input-group input {
-    background-color: #fff;
-    color: black;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
+  background-color: #fff;
+  color: black;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
 /* Botão */
 .btn-login {
+<<<<<<< Updated upstream
     background-color: #F59E0B;
     color: #F9FAFB;
     width: 40%;
@@ -131,6 +132,21 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+=======
+  background-color: #f59e0b;
+  color: #f9fafb;
+  width: 40%;
+  letter-spacing: 2px;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  margin: 15px 0;
+>>>>>>> Stashed changes
 }
 
 .btn-login:hover {
@@ -139,47 +155,83 @@ body {
 
 /* Esqueceu a senha? */
 .forgot-password {
-    text-align: left;
-    margin-bottom: 15px;
+  text-align: left;
+  margin-bottom: 15px;
 }
 
 .forgot-password a {
-    color: #fff;
-    text-decoration: none;
+  color: #fff;
+  text-decoration: none;
 }
 
 /* Cadastra-se */
 .signup-link {
-    text-align: center;
-    margin-top: 15px;
+  text-align: center;
+  margin-top: 15px;
 }
 
 .signup-link a {
-    color: #fff;
-    text-decoration: none;
+  color: #fff;
+  text-decoration: none;
 }
 
 /* Referenciade campos */
-#cpf.error{
-    border: 1px solid red;
+#cpf.error {
+  border: 1px solid red;
 }
 
 .spanErro {
-    color: red;
-    font-size: 15px;
-    text-align: left;
+  color: red;
+  font-size: 15px;
+  text-align: left;
 }
 
 /* Mensagens de erro ou sucesso */
 .message {
-    font-size: 14px;
-    margin-bottom: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .success {
-    color: #4BB543;
+  color: #4bb543;
 }
 
 .error {
+<<<<<<< Updated upstream
     color: #FF0000;
 }
+=======
+  color: #ff0000;
+}
+
+/* Para envolver o input e o botão toggle */
+.password-wrapper {
+  position: relative; /* Define o contexto para o ícone absoluto */
+  display: flex;
+  align-items: center;
+}
+
+/* Garante que o input ocupe o espaço e permite espaço para o ícone */
+.password-wrapper input {
+  padding-right: 40px; /* Adiciona espaço para o botão/ícone */
+  width: 100%;
+}
+
+/* Estiliza e posiciona o botão de toggle */
+.password-toggle-btn {
+  position: absolute;
+  right: 10px; /* Posição à direita */
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.2rem;
+  height: 100%; /* Ajusta a altura */
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+.password-toggle-btn:focus {
+  outline: none; /* Remove o contorno ao focar */
+}
+>>>>>>> Stashed changes

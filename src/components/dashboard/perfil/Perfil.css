@@ -1,81 +1,89 @@
-.main-container {
-    flex-grow: 1;
-    padding: 20px 40px;
-    background-color: #fcfcfc;
+.perfil-container {
+  flex-grow: 1;
+  padding: 20px 40px;
+  background-color: #fcfcfc;
+  border-radius: 12px;
 }
 
-.profile-title {
+/* .profile-title {
     font-size: 400;
     margin-bottom: 25px;
     color: #333;
+} */
+
+.perfil-container h1 {
+  font-size: 2.5em;
+  font-weight: 600;
+  color: var(--cor-principal);
+  margin-bottom: 30px;
 }
 
 .profile-fields {
-    display: flex;
-    gap: 40px;
+  display: flex;
+  gap: 40px;
 }
 
-.profile-fields .column{
-    flex: 1;
-    max-width: 400px;
+.profile-fields .column {
+  flex: 1;
+  max-width: 400px;
 }
 
 .form-group {
-    margin-bottom: 20px;
-    position: relative;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .form-group label {
-    display: block;
-    font-size: 0.9em;
-    color: #555;
-    margin-bottom: 5px;
-    text-align: left;
+  display: block;
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 5px;
+  text-align: left;
 }
 
 .form-group input {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    box-sizing: border-box;
-    font-size: 1em;
-    color: #333;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box;
+  font-size: 1em;
+  color: #333;
 
-    border-color: #ddd;
-    height: 38px;
+  border-color: #ddd;
+  height: 38px;
 }
 
 .action-buttons {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .action-buttons button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-right: 15px;
-    transition: opacity 0.2s;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 15px;
+  transition: opacity 0.2s;
 }
 
 .action-buttons button:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 .save-btn {
-    background-color: #f7a01d;
-    color: white;
+  background-color: #f7a01d;
+  color: white;
 }
-
 
 .cancel-btn {
-    background-color: #f7a01d;
-    color: white;
+  background-color: #f7a01d;
+  color: white;
 }
 
-.save-btn:hover, .cancel-btn:hover {
-    opacity: .8;
+.save-btn:hover,
+.cancel-btn:hover {
+  opacity: 0.8;
 }
