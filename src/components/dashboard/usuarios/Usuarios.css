@@ -213,3 +213,15 @@
   justify-content: flex-end;
   /* Alinha o filtro à direita, longe das abas */
 }
+
+
+.floating-add-btn {
+  /* position: fixed; */
+  border-radius: 100%;
+  background: #0d6efd;
+  color: #fff;
+  /* font-size: 32px; */
+  border: none;
+  cursor: pointer;
+}
+

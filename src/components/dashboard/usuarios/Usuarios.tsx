@@ -1,392 +1,212 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Usuarios.css";
+import UsuarioModal from "./modalUsers/ModalUsers";
 
-const alunos = [
-  {
-    id: 1,
-    matricula: "2025001",
-    turma: "6º Ano A",
-    nome: "Bruno Ferreira Lima",
-    email: "bruno.lima@escola.com",
-    tipo: "Aluno",
-    status: "Ativo"
-  },
-  {
-    id: 2,
-    matricula: "2025002",
-    turma: "7º Ano B",
-    nome: "Diana Pereira Alves",
-    email: "diana.alves@escola.com",
-    tipo: "Aluno",
-    status: "Inativo"
-  },
-  {
-    id: 3,
-    matricula: "2025003",
-    turma: "8º Ano C",
-    nome: "Eduardo Costa Ramos",
-    email: "eduardo.ramos@escola.com",
-    tipo: "Aluno",
-    status: "Pre-cadastro"
-  }
-];
-
-const professores = [
-  {
-    id: 4,
-    disciplina: "Matemática",
-    nome: "Ana Carolina Souza",
-    email: "ana.souza@escola.com",
-    tipo: "Professor",
-    status: "Ativo"
-  },
-  {
-    id: 5,
-    disciplina: "História",
-    nome: "Carlos Eduardo Mendes",
-    email: "carlos.mendes@escola.com",
-    tipo: "Professor",
-    status: "Ativo"
-  }
-];
-
-// Aluno
-interface Aluno {
+// ===== Interfaces =====
+interface BaseUser {
   id: number;
   nome: string;
   email: string;
-  password?: string;
-  cpf: string;
-  matricula: string;
   status: string;
-  deficiencia: string;
-  tipoDeficiencia?: string;
-  dataNasc: string;
-  tipo: "Aluno";
+  tipo: "Aluno" | "Professor";
 }
 
-// Professor
-interface Professor {
-  id: number;
-  nome: string;
-  email: string;
-  password?: string;
-  cpf: string;
+interface Aluno extends BaseUser {
   matricula: string;
-  status: string;
-  dataAdmissao: string;
-  formacaoAcad: string;
-  titulacao: string;
-  deficiencia: string;
-  tipoDeficiencia?: string;
-  tipo: "Professor";
+  turma?: string;
 }
 
+interface Professor extends BaseUser {
+  disciplina?: string;
+}
 
-function Usuarios() {
-  // Estado para controlar qual lista está sendo exibida/filtrada (alunos, professores, todos)
-  const [perfilExibido, setPerfilExibido] = useState("todos");
-  // Estado para controlar o filtro de status
-  const [filtroStatus, setFiltroStatus] = useState("Todos");
-  // Estado para controlar qual formulário de cadastro deve aparecer (Aluno ou Professor)
-  const [perfilCadastro, setPerfilCadastro] = useState("");
-
-  const [termoBusca, setTermoBusca] = useState("");
+// ===== Componente =====
+export default function Usuarios() {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [professores, setProfessores] = useState<Professor[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [perfilExibido, setPerfilExibido] = useState("todos");
+  const [filtroStatus, setFiltroStatus] = useState("Todos");
+  const [termoBusca, setTermoBusca] = useState("");
 
-  useEffect(()=>{
+  // Modal
+  const [modalAberto, setModalAberto] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const [perfilModal, setPerfilModal] = useState<"alunos" | "professores" | "">("");
+  const [form, setForm] = useState<any>({});
+  const [usuarioEditando, setUsuarioEditando] = useState<any>(null);
 
-    const carregarDados = async () => {
-      setLoading(true)
+  // ===== Carregar dados =====
+  useEffect(() => {
+    const carregar = async () => {
+      const [resAlunos, resProf] = await Promise.all([
+        axios.get("http://localhost:3000/aluno"),
+        axios.get("http://localhost:3000/professor"),
+      ]);
 
-      try {
-        const [resAlunos, resProfessores] = await Promise.all([
-          axios.get("http://localhost:3000/aluno"),
-          axios.get("http://localhost:3000/professor"),
-        ])
+      setAlunos(resAlunos.data.map((a: any) => ({ ...a, tipo: "Aluno" })));
+      setProfessores(resProf.data.map((p: any) => ({ ...p, tipo: "Professor" })));
+    };
 
-        // Normalização dos dados
-        const alunosFormatados = resAlunos.data.map(aluno => ({
-          ...aluno,
-          tipo: "Aluno"
-        }));
+    carregar();
+  }, []);
 
-        const professoresFormatados = resProfessores.data.map(prof => ({
-          ...prof,
-          tipo: "Professor"
-        }));
+  // ===== Ações =====
+  const handleEditar = (usuario: any) => {
+    setModoEdicao(true);
+    setUsuarioEditando(usuario);
+    setPerfilModal(usuario.tipo === "Aluno" ? "alunos" : "professores");
+    setForm(usuario);
+    setModalAberto(true);
+  };
 
-        setAlunos(alunosFormatados)
-        setProfessores(professoresFormatados)
+  const handleSubmit = async () => {
+    try {
+      if (modoEdicao) {
+        const endpoint =
+          perfilModal === "alunos"
+            ? `http://localhost:3000/aluno/${usuarioEditando.id}`
+            : `http://localhost:3000/professor/${usuarioEditando.id}`;
 
-      } catch (error) {
-        console.error("Error ao carregar Usuários", error);
-      } finally {
-        setLoading(false)
+        await axios.patch(endpoint, form);
+      } else {
+        const endpoint =
+          perfilModal === "alunos"
+            ? "http://localhost:3000/aluno"
+            : "http://localhost:3000/professor";
+
+        await axios.post(endpoint, form);
       }
+
+      setModalAberto(false);
+      window.location.reload();
+    } catch (err) {
+      console.error("Erro ao salvar usuário", err);
     }
-
-    carregarDados();
-  }, [])
-
-  // Combinei as listas para a aba 'Todos'
-  const todosUsuarios = [...alunos, ...professores];
-
-  // Opções de filtro de Status (Todos, Ativo, Inativo, Pre-cadastro)
-  const statusDeFiltro = ["Todos", "Ativo", "Inativo", "Pre-cadastro"];
-
-  // Define a lista de dados base para o filtro
-  const listaBase = perfilExibido === 'alunos' 
-    ? alunos 
-    : perfilExibido === 'professores' 
-      ? professores 
-      : todosUsuarios;
-
-  // Lógica de Filtragem pelo Status Selecionado
-  const usuariosPorStatus = listaBase.filter(usuario => {
-    if (filtroStatus === "Todos") {
-      return true;
-    }
-    return usuario.status === filtroStatus;
-  });
-
-  const usuariosFiltrados = usuariosPorStatus.filter(usuario => {
-    const termoLower = termoBusca.toLowerCase();
-    
-    // Se o termo de busca estiver vazio, retorna todos os usuários filtrados por status
-    if (!termoLower) {
-      return true;
-    }
-
-    // Campos a serem buscados, unificados em string minúscula
-    const nome = usuario.nome.toLowerCase();
-    const email = usuario.email.toLowerCase();
-    // Adicione outros campos relevantes dependendo do TIPO (Aluno ou Professor)
-    
-    // Campos específicos de Aluno
-    const matricula = usuario.matricula ? usuario.matricula.toLowerCase() : '';
-    // CPF (se existir, adicione-o no objeto de dados e use aqui)
-    // const cpf = usuario.cpf ? usuario.cpf.toLowerCase() : '';
-
-    // Verifica se o termo existe em qualquer um dos campos
-    const encontrado = nome.includes(termoLower) || email.includes(termoLower) || matricula.includes(termoLower);
-    
-    return encontrado;
-  });
-
-  // Função para lidar com a seleção do FORMULÁRIO de cadastro
-  const handleCadastroChange = (e) => {
-    setPerfilCadastro(e.target.value);
-  };
-  
-  // Função para lidar com a TABELA de exibição
-  const handleAbaChange = (tipo:string) => {
-    setPerfilExibido(tipo.toLowerCase());
-    setFiltroStatus("Todos");
-    setTermoBusca(""); // Resetar busca ao mudar de aba
   };
 
-  const handleBuscaChange = (e) => {
-    setTermoBusca(e.target.value);
-  };
-
-  const handleInativar = async (id: number, tipo: string, statusAtual: string) => {
-  try {
-    const novoStatus = statusAtual === "Ativo" ? "Inativo" : "Ativo";
-
+  const handleInativar = async (usuario: any) => {
+    const novoStatus = usuario.status === "Ativo" ? "Inativo" : "Ativo";
     const endpoint =
-      tipo === "Aluno"
-        ? `http://localhost:3000/aluno/${id}/status`
-        : `http://localhost:3000/professor/${id}/status`;
+      usuario.tipo === "Aluno"
+        ? `http://localhost:3000/aluno/${usuario.id}/status`
+        : `http://localhost:3000/professor/${usuario.id}/status`;
 
     await axios.patch(endpoint, { status: novoStatus });
+    window.location.reload();
+  };
 
-    if (tipo === "Aluno") {
-      setAlunos(prev =>
-        prev.map(u =>
-          u.id === id ? { ...u, status: novoStatus } : u
-        )
-      );
-    } else {
-      setProfessores(prev =>
-        prev.map(u =>
-          u.id === id ? { ...u, status: novoStatus } : u
-        )
-      );
-    }
+  // ===== Filtros =====
+  const todos = [...alunos, ...professores];
 
-  } catch (error) {
-    console.error("Erro ao alterar status do usuário", error);
-  }
-};
+  const listaBase =
+    perfilExibido === "alunos"
+      ? alunos
+      : perfilExibido === "professores"
+      ? professores
+      : todos;
 
-  
-  // Componente auxiliar para renderizar a tabela
-  const TabelaDeUsuarios = ({ dados, tipo }) => (
-    <div className="table-responsive-users">
+  const filtrados = listaBase.filter((u) => {
+    const matchStatus = filtroStatus === "Todos" || u.status === filtroStatus;
+    const matchBusca =
+      u.nome.toLowerCase().includes(termoBusca.toLowerCase()) ||
+      u.email.toLowerCase().includes(termoBusca.toLowerCase());
+    return matchStatus && matchBusca;
+  });
+
+  return (
+    <div className="container">
+      <h2>Gerenciamento de Usuários</h2>
+
+      {/* Botão flutuante */}
+      <button
+        className="floating-add-btn"
+        title="Novo Usuário"
+        onClick={() => {
+          setModoEdicao(false);
+          setForm({});
+          setPerfilModal("");
+          setModalAberto(true);
+        }}
+      >
+        +
+      </button>
+
+      {/* Abas */}
+      <div className="tabs-container">
+        {["Todos", "Alunos", "Professores"].map((t) => (
+          <button
+            key={t}
+            className={`tab-button ${perfilExibido === t.toLowerCase() ? "active" : ""}`}
+            onClick={() => setPerfilExibido(t.toLowerCase())}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {/* Filtros */}
+      <div className="search-filter-area">
+        <input
+          className="search-input"
+          placeholder="Buscar por nome ou e-mail"
+          value={termoBusca}
+          onChange={(e) => setTermoBusca(e.target.value)}
+        />
+
+        <select
+          className="filtro-select"
+          value={filtroStatus}
+          onChange={(e) => setFiltroStatus(e.target.value)}
+        >
+          {["Todos", "Ativo", "Inativo"].map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Tabela */}
       <table className="user-table">
         <thead>
           <tr>
-            {/* <th>ID</th> */}
             <th>Nome</th>
             <th>E-mail</th>
-            {tipo === 'alunos' && <th>Matrícula / Turma</th>}
-            {/* {tipo === 'professores' && <th>Disciplina</th>} */}
             <th>Status</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
-          {dados.length > 0 ? (
-            dados.map((usuario) => (
-              <tr key={`${usuario.tipo}-${usuario.id}`}>
-                {/* <td>{usuario.id}</td> */}
-                <td>{usuario.nome}</td>
-                <td>{usuario.email}</td>
-                {/* Informações específicas de Aluno */}
-                {tipo === 'alunos' && 
-                  <td>
-                    {usuario.matricula} ({usuario.turma})
-                  </td>
-                }
-                {/* Informações específicas de Professor */}
-                {/* {tipo === 'professores' && <td>{usuario.disciplina}</td>} */}
-                
-                <td>
-                  <span className={`status status-${usuario.status.toLowerCase().replace('-', '')}`}>{usuario.status}</span>
-                </td>
-                <td>
-                  <div className="acoes">
-                    <button className="action-btn edit-btn">Editar</button>
-                    <button 
-                    className="action-btn delete-btn" 
-                    onClick={() => handleInativar(usuario.id, usuario.tipo, usuario.status)}>
-                      {usuario.status === "Ativo" ? "Inativar" : "Ativar"}
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={tipo === 'alunos' ? 6 : tipo === 'professores' ? 5 : 6} style={{ textAlign: 'center', padding: '20px' }}>
-                Nenhum(a) {tipo.slice(0, -1)} encontrado(a) com este status.
+          {filtrados.map((u) => (
+            <tr key={`${u.tipo}-${u.id}`}>
+              <td>{u.nome}</td>
+              <td>{u.email}</td>
+              <td>{u.status}</td>
+              <td className="acoes">
+                <button className="action-btn edit-btn" onClick={() => handleEditar(u)}>
+                  Editar
+                </button>
+                <button
+                  className="action-btn delete-btn"
+                  onClick={() => handleInativar(u)}
+                >
+                  {u.status === "Ativo" ? "Inativar" : "Ativar"}
+                </button>
               </td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
-    </div>
-  );
 
-  return (
-    <div className="container">
-      <h2>Gerenciamento de Usuários</h2>
-      
-      {/* ------------------ Abas de Navegação (Lista) ------------------ */}
-      <div className="tabs-container">
-        {['Todos','Alunos', 'Professores'].map(tipo => (
-          <button
-            key={tipo}
-            className={`tab-button ${perfilExibido === tipo.toLowerCase() ? 'active' : ''}`}
-            onClick={() => handleAbaChange(tipo)}
-          >
-            {tipo}
-          </button>
-        ))}
-      </div>
-      
-      {/* ------------------ Filtro de Status ------------------ */}
-      <div className="search-filter-area">
-        {/* NOVO INPUT DE BUSCA */}
-        <input 
-            type="text"
-            placeholder="Buscar por nome, e-mail, matrícula..."
-            value={termoBusca}
-            onChange={handleBuscaChange}
-            className="search-input"
-        />
-        
-        <div className="filtro-area">
-            <label htmlFor="filtroStatus">Filtrar por Status:</label>
-            <select 
-              id="filtroStatus" 
-              value={filtroStatus} 
-              onChange={(e) => setFiltroStatus(e.target.value)}
-              className="filtro-select"
-            >
-              {statusDeFiltro.map(status => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
-        </div>
-      </div>
-
-      {/* ------------------ Tabela de Exibição ------------------ */}
-      <TabelaDeUsuarios dados={usuariosFiltrados} tipo={perfilExibido} />
-
-      <hr style={{ margin: '40px 0' }}/> 
-
-      {/* ------------------ Seleção de Formulário (Cadastro) ------------------ */}
-      <h3>Novo Cadastro</h3>
-      <select className="select" name="perfil" id="perfil" value={perfilCadastro} onChange={handleCadastroChange}>
-        <option value="">Escolha um perfil para cadastrar</option>
-        <option value="alunos">Aluno</option>
-        <option value="professores">Professor</option>
-      </select>
-
-      {/* Formulário de Aluno */}
-      {perfilCadastro === "alunos" && (
-        <div style={{ marginTop: "20px" }} className="cadastro-form">
-          <h4>Cadastro de Aluno</h4>
-          {/* ... (Seu formulário de aluno) ... */}
-          <form id="form">
-            <div className="form-group">
-              <label>Nome do Aluno:</label>
-              <input type="text" name="nomeAluno" />
-            </div>
-            <div className="form-group">
-              <label>Matrícula:</label>
-              <input type="text" name="matricula" />
-            </div>
-            <div className="form-group">
-              <label>Turma:</label>
-              <input type="text" name="turma" />
-            </div>
-            <button type="submit" className="button-primary">Cadastrar Aluno</button>
-          </form>
-        </div>
-      )}
-
-      {/* Formulário de Professor */}
-      {perfilCadastro === "professores" && (
-        <div style={{ marginTop: "20px" }} className="cadastro-form">
-          <h4>Cadastro de Professor</h4>
-          {/* ... (Seu formulário de professor) ... */}
-          <form id="form">
-            <div className="form-group">
-              <label>Nome do Professor:</label>
-              <input type="text" name="nomeProfessor" />
-            </div>
-            <div className="form-group">
-              <label>Disciplina:</label>
-              <input type="text" name="disciplina" />
-            </div>
-            <div className="form-group">
-              <label>E-mail:</label>
-              <input type="email" name="email" />
-            </div>
-            <button type="submit" className="button-primary">Cadastrar Professor</button>
-          </form>
-        </div>
-      )}
+      {/* Modal */}
+      <UsuarioModal
+        aberto={modalAberto}
+        modoEdicao={modoEdicao}
+        perfil={perfilModal}
+        form={form}
+        setPerfil={setPerfilModal}
+        onClose={() => setModalAberto(false)}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }
-
-export default Usuarios;
