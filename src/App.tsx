@@ -22,6 +22,7 @@ import ConfNotas from './components/dashboard/confNotas/ConfNotas'
 import CriaAluno from './components/dashboard/criaAluno/CriaAluno'
 import CriaProfessor from './components/dashboard/criaProfessor/CriaProfessor'
 import Disciplina from './components/dashboard/disciplina/Disciplina'
+import Matricula from './components/dashboard/matricula/Matricula'
 
 function ProtectedRoute({ children }: any) {
   const token = localStorage.getItem("authToken");
@@ -125,6 +126,12 @@ function App() {
         <Route path="turma" element={
           <RoleBasedRoute allowed={["coordenador"]}>
             <CriaTurma />
+          </RoleBasedRoute>
+        } />
+
+        <Route path="matricula" element={
+          <RoleBasedRoute allowed={["coordenador"]}>
+            <Matricula />
           </RoleBasedRoute>
         } />
 

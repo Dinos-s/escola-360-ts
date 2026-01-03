@@ -34,6 +34,7 @@ const ROTAS_COORDENADOR = [
     { to: "/dashboard/criCalendario", name: "Criar Calendário" },
     { to: "/dashboard/disciplina", name: "Criar Disciplina" },
     { to: "/dashboard/turma", name: "Criar Turma" },
+    { to: "/dashboard/matricula", name: "Criar Matrícula" },
     { to: "/dashboard/perfil", name: "Meu Perfil" },
     { to: "/dashboard/trocaSenha", name: "Trocar Senha" },
     { to: "/dashboard/criaAluno", name: "Criar Aluno" },
