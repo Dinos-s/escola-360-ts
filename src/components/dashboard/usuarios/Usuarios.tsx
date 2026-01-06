@@ -67,10 +67,9 @@ export default function Usuarios() {
           perfilModal === "alunos"
             ? `http://localhost:3000/aluno/${usuarioEditando.id}`
             : `http://localhost:3000/professor/${usuarioEditando.id}`;
-          console.log("Dados do formulário:", form);
-          console.log("endpoint:", endpoint);
           const { id, tipo, ...dadosParaEnviar } = form;
-        await axios.patch(endpoint, form);
+
+      await axios.patch(endpoint, dadosParaEnviar);
       } else {
         const endpoint =
           perfilModal === "alunos"
@@ -206,6 +205,7 @@ export default function Usuarios() {
         modoEdicao={modoEdicao}
         perfil={perfilModal}
         form={form}
+        setForm={setForm}
         setPerfil={setPerfilModal}
         onClose={() => setModalAberto(false)}
         onSubmit={handleSubmit}
