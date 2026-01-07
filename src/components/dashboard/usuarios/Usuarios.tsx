@@ -23,6 +23,7 @@ interface Professor extends BaseUser {
 
 // ===== Componente =====
 export default function Usuarios() {
+  const [usuarios, setUsuarios] = useState<any[]>([]);
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [professores, setProfessores] = useState<Professor[]>([]);
   const [perfilExibido, setPerfilExibido] = useState("todos");
@@ -67,20 +68,52 @@ export default function Usuarios() {
           perfilModal === "alunos"
             ? `http://localhost:3000/aluno/${usuarioEditando.id}`
             : `http://localhost:3000/professor/${usuarioEditando.id}`;
-          const { id, tipo, ...dadosParaEnviar } = form;
+        const { id, tipo, senha, status, ...dadosParaEnviar } = form;
 
-      await axios.patch(endpoint, dadosParaEnviar);
+      const response = await axios.patch(endpoint, dadosParaEnviar);
+      setUsuarios((prev) =>
+        prev.map((u) =>
+          u.id === usuarioEditando.id ? response.data : u
+        )
+      );
       } else {
+        let dadosParaEnviar: any = { 
+          nome: form.nome,
+          matricula: form.matricula,
+          email: form.email,
+          cpf: form.cpf,
+          password: form.senha,
+          status: form.status,
+          deficiencia: form.deficiencia,
+          tipoDeficiencia: form.tipoDeficiencia || "",
+        };
+
+        if (perfilModal === "alunos") {
+          dadosParaEnviar = {
+            ...dadosParaEnviar,
+            dataNasc: form.dataNascimento,
+          };
+        }
+
+        if (perfilModal === "professores") {
+          dadosParaEnviar = {
+            ...dadosParaEnviar,
+            dataAdmissao: form.dataAdmissao,
+            titulacao: form.titulacao,
+            formacaoAcad: form.formacaoAcademica,
+          };
+        }
         const endpoint =
           perfilModal === "alunos"
-            ? "http://localhost:3000/aluno"
-            : "http://localhost:3000/professor";
+            ? "http://localhost:3000/aluno/registro"
+            : "http://localhost:3000/professor/registro";
 
-        await axios.post(endpoint, form);
+        const response = await axios.post(endpoint, dadosParaEnviar);
+        setUsuarios((prev) => [...prev, response.data]);
       }
-
+      
       setModalAberto(false);
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       console.error("Erro ao salvar usuário", err);
       console.log("dados error:", err.response.data);
