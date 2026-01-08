@@ -50,6 +50,16 @@
   font-size: 1em;
 }
 
+.form-group textarea {
+  width: 100%;
+  padding: 2px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 1em;
+  resize: vertical;
+}
+
 .btn-salvar {
   /* align-items: flex-start; */
   background-color: #ff9800;

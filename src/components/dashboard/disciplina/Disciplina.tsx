@@ -47,7 +47,7 @@ function Disciplina() {
         assunto: "",
     });
 
-    useEffect(() => { carregarDisciplinas() })
+    useEffect(() => { carregarDisciplinas() }, [])
 
     const carregarDisciplinas = async () => {
         const { data } = await api.get<Disciplina[]>('/disciplina');
@@ -290,13 +290,14 @@ function Disciplina() {
 
                         <div className="form-group" style={{ gridColumn: "1 / -1" }}>
                             <label>Assunto da Disciplina</label>
-                            <input
+                            {/* <input
                                 type="text"
                                 name="assunto"
                                 placeholder="Ex: Geometria, Gramática, Idade Média..."
                                 value={form.assunto}
                                 onChange={handleChange}
-                            />
+                            /> */}
+                            <textarea name="assunto" id="" value={form.assunto} onChange={handleChange} placeholder="Descreva o assunto da disciplina..." rows={5}></textarea>
                         </div>
                     </div>
                 </div>

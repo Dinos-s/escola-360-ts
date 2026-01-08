@@ -212,6 +212,8 @@ function CriaAluno() {
         { key: 'matricula', header: 'Matrícula' },
         { key: 'nome', header: 'Nome' },
         { key: 'email', header: 'E-mail' },
+        { key: 'cpf', header: 'CPF' },
+        { key: 'dataNasc', header: 'Data de Nascimento' },
         { key: 'status', header: 'Status' },
         {
             key: "acoes",
@@ -233,7 +235,7 @@ function CriaAluno() {
                 </button>
                 </div>
             ),
-            },
+        },
     ];
 
     return (

@@ -43,7 +43,7 @@ function Matricula() {
 
                 setAlunos(alunos.data);
                 setTurmas(turmas.data);
-                setMatricula(matricula.data);                
+                setMatricula(matricula.data);         
             } catch (error) {
                 console.error(error);
                 setMessagem('Erro ao buscar dados iniciais.');
@@ -101,8 +101,6 @@ function Matricula() {
                             value={form.anoLetivo}
                             onChange={handleChange}
                             placeholder="Ex: 2026"
-                            min="1900"
-                            max="2100"
                             required
                         />
                     </div>
@@ -206,7 +204,7 @@ function Matricula() {
                     ) : (
                         matricula.map(matricula => (
                             <tr key={matricula.id}>
-                                <td>{new Date(matricula.anoLetivo).getFullYear()}</td>
+                                <td>{matricula.anoLetivo}</td>
                                 <td>{matricula.aluno?.nome}</td>
                                 <td>{matricula.turma?.nome}</td>
                             </tr>
