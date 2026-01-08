@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Turma.css";
+import { DataTable, type TableColumn } from '../../tabela/tabela';
 
 interface Turma {
   id: number;
@@ -66,6 +67,11 @@ function Turma() {
     }
   };
 
+  const columns: TableColumn<Turma>[] = [
+    { key: 'nome', header: 'Nome' },
+    { key: 'turno', header: 'Turno' },
+  ];
+
   return (
     <div className="main-container">
       <h1 className="profile-title">Cadastro de Turmas</h1>
@@ -123,7 +129,7 @@ function Turma() {
       <div className="turma-list">
         <h2>Turmas Cadastradas</h2>
 
-        <table>
+        {/* <table>
           <thead>
             <tr>
               <th>Nome</th>
@@ -138,7 +144,8 @@ function Turma() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
+        <DataTable columns={columns} data={turmas} emptyMessage="Nenhuma turma cadastrada"/>
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ import CriaAluno from './components/dashboard/criaAluno/CriaAluno'
 import CriaProfessor from './components/dashboard/criaProfessor/CriaProfessor'
 import Disciplina from './components/dashboard/disciplina/Disciplina'
 import Matricula from './components/dashboard/matricula/Matricula'
+import ProfessorDiciplina from './components/dashboard/professorDiciplina/ProfessorDiciplina'
 
 function ProtectedRoute({ children }: any) {
   const token = localStorage.getItem("authToken");
@@ -126,6 +127,12 @@ function App() {
         <Route path="turma" element={
           <RoleBasedRoute allowed={["coordenador"]}>
             <CriaTurma />
+          </RoleBasedRoute>
+        } />
+
+        <Route path="professorDiciplina" element={
+          <RoleBasedRoute allowed={["coordenador"]}>
+            <ProfessorDiciplina />
           </RoleBasedRoute>
         } />
 

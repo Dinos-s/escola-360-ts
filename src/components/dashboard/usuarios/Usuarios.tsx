@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Usuarios.css";
 import UsuarioModal from "./modalUsers/ModalUsers";
+import { DataTable, type TableColumn } from "../../tabela/tabela";
 
 // ===== Interfaces =====
 interface BaseUser {
@@ -11,6 +12,14 @@ interface BaseUser {
   status: string;
   tipo: "Aluno" | "Professor";
 }
+
+type Usuario = {
+  id: number;
+  nome: string;
+  email: string;
+  status: "Ativo" | "Inativo";
+};
+
 
 interface Aluno extends BaseUser {
   matricula: string;
@@ -149,6 +158,33 @@ export default function Usuarios() {
     return matchStatus && matchBusca;
   });
 
+  const columns: TableColumn<Usuario>[] = [
+    { key: "nome", header: "Nome" },
+    { key: "email", header: "E-mail" },
+    { key: "status", header: "Status" },
+    {
+      key: "acoes",
+      header: "Ações",
+      render: (u) => (
+        <div className="acoes">
+          <button
+            className="action-btn edit-btn"
+            onClick={() => handleEditar(u)}
+          >
+            Editar
+          </button>
+
+          <button
+            className="action-btn delete-btn"
+            onClick={() => handleInativar(u)}
+          >
+            {u.status === "Ativo" ? "Inativar" : "Ativar"}
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="container">
       <h2>Gerenciamento de Usuários</h2>
@@ -201,7 +237,7 @@ export default function Usuarios() {
       </div>
 
       {/* Tabela */}
-      <table className="user-table">
+      {/* <table className="user-table">
         <thead>
           <tr>
             <th>Nome</th>
@@ -230,7 +266,8 @@ export default function Usuarios() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
+      <DataTable columns={columns} data={filtrados} emptyMessage="Nenhum usuário encontrado"/>
 
       {/* Modal */}
       <UsuarioModal

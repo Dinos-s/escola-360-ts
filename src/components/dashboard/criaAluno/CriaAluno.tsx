@@ -1,11 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CriaAluno.css';
+
+import { DataTable, type TableColumn } from '../../tabela/tabela';
+
+interface Aluno {
+    id: number;
+    nome: string;
+    email: string;
+    cpf: string;
+    matricula: string;
+    dataNasc: string;
+    status: string;
+    deficiencia: string;
+    tipoDeficiencia: string;
+}
 
 function CriaAluno() {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');    
     const [cpfError, setCpfError] = useState("");
+    const [alunos, setAlunos] = useState<Aluno[]>([]);
+    
+    const [editId, setEditId] = useState<number | null>(null);
     const [form, setForm] = useState({
         nome: "",
         email: "",
@@ -17,6 +34,19 @@ function CriaAluno() {
         tipoDeficiencia: "",
         dataNasc: ""
     });
+
+    const buscarAlunos = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/aluno');
+            setAlunos(response.data);
+        } catch {
+            setError('Erro ao carregar alunos');
+        }
+    };
+
+    useEffect(() => {
+        buscarAlunos();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -148,6 +178,63 @@ function CriaAluno() {
 
         return true;
     };
+
+    const handleInativar = async (usuario: any) => {
+        const novoStatus = usuario.status === "Ativo" ? "Inativo" : "Ativo";
+        const endpoint = `http://localhost:3000/aluno/${usuario.id}/status`
+
+        await axios.patch(endpoint, { status: novoStatus });
+        window.location.reload();
+    };
+
+    const formatarParaInputDate = (data: string) => {
+        if (!data) return '';
+        return new Date(data).toISOString().split('T')[0];
+    };
+
+
+    const handleEdit = (a: Aluno) => {
+        setEditId(a.id);
+        setForm({
+            nome: a.nome,
+            email: a.email,
+            cpf: a.cpf,
+            matricula: a.matricula,
+            dataNasc: formatarParaInputDate(a.dataNasc),
+            status: a.status,
+            deficiencia: a.deficiencia,
+            tipoDeficiencia: a.tipoDeficiencia,
+            password: ''
+        });
+    };
+
+    const columns: TableColumn<Aluno>[] = [
+        { key: 'matricula', header: 'Matrícula' },
+        { key: 'nome', header: 'Nome' },
+        { key: 'email', header: 'E-mail' },
+        { key: 'status', header: 'Status' },
+        {
+            key: "acoes",
+            header: "Ações",
+            render: (u) => (
+                <div className="acoes">
+                <button
+                    className="action-btn edit-btn"
+                    onClick={() => handleEdit(u)}
+                >
+                    Editar
+                </button>
+
+                <button
+                    className="action-btn delete-btn"
+                    onClick={() => handleInativar(u)}
+                >
+                    {u.status === "Ativo" ? "Inativar" : "Ativar"}
+                </button>
+                </div>
+            ),
+            },
+    ];
 
     return (
         <div className="main-container">
@@ -296,14 +383,16 @@ function CriaAluno() {
                         </div>
                     </div>
                 </div>
-        {/* ---------- BOTÕES ---------- */ }
-        < div className = "action-buttons" >
+                {/* ---------- BOTÕES ---------- */ }
+                < div className = "action-buttons" >
                     <button type="submit" className="save-btn">Cadastrar</button>
                     <button type="button" className="cancel-btn" onClick={limparForm}>Cancelar</button>
                 </div >
             </form >
-
-        </div >
+            
+            <h2>Alunos Cadastrados</h2>
+            <DataTable columns={columns} data={alunos} emptyMessage="Nenhum aluno cadastrado"/>
+        </div>
     );
 }
 
