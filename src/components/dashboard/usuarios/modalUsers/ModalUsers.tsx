@@ -26,136 +26,206 @@ export default function UsuarioModal({
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3>{modoEdicao ? "Editar Usuário" : "Novo Usuário"}</h3>
+        {/* Botão X Superior */}
+        <button
+          className="modal-close-btn"
+          onClick={onClose}
+          aria-label="Fechar"
+        >
+          &times;
+        </button>
 
-        {!modoEdicao && (
-          <select value={perfil} onChange={(e) => setPerfil(e.target.value)}>
-            <option value="">Selecione o tipo</option>
-            <option value="alunos">Aluno</option>
-            <option value="professores">Professor</option>
-          </select>
-        )}
+        <div className="modal-header">
+          <h3>{modoEdicao ? "Editar Usuário" : "Novo Usuário"}</h3>
+          {/* <p>
+            Preencha as informações abaixo para{" "}
+            {modoEdicao ? "atualizar" : "cadastrar"} os dados.
+          </p> */}
+        </div>
 
-        {perfil && (
-          <>
-            <input
-              type="text"
-              placeholder="Nome"
-              value={form.nome || ""}
-              onChange={(e) => setForm({ ...form, nome: e.target.value })}
-            />
-
-            {!modoEdicao && (
-              <input
-                type="text"
-                placeholder="CPF"
-                value={form.cpf || ""}
-                onChange={(e) => setForm({ ...form, cpf: e.target.value })}
-              />
-            )}
-
-            <input
-              type="email"
-              placeholder="E-mail"
-              value={form.email || ""}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-            />
-
-            {!modoEdicao && perfil === "alunos" && (
-              <input
-                type="date"
-                placeholder="data de nascimento"
-                value={form.dataNascimento || ""}
-                onChange={(e) => setForm({ ...form, dataNascimento: e.target.value })}
-              />
-            )}
-
-            
-            <input
-              type="number"
-              placeholder="Matrícula"
-              value={form.matricula || ""}
-              disabled={modoEdicao}
-              onChange={(e) => setForm({ ...form, matricula: e.target.value })}
-            />
-
-            {perfil === "professores" && (
-              <input
-                type="date"
-                placeholder="Data de Adimissão"
-                value={form.dataAdmissao || ""}
-                onChange={(e) => setForm({ ...form, dataAdmissao: e.target.value })}
-              />
-            )}
-
-            {perfil === "professores" && (
-              <input
-                type="text"
-                placeholder="Titularidade"
-                value={form.titulacao || ""}
-                onChange={(e) => setForm({ ...form, titulacao: e.target.value })}
-              />
-            )}
-
-            {perfil === "professores" && (
-              <input
-                type="text"
-                placeholder="Formação Acadêmica"
-                value={form.formacaoAcademica || ""}
-                onChange={(e) => setForm({ ...form, formacaoAcademica: e.target.value })}
-              />
-            )}
-
-            {!modoEdicao && (
+        <div className="modal-body">
+          {!modoEdicao && (
+            <div className="form-group-modal">
+              <label>Tipo de Perfil</label>
               <select
-                value={form.status || ""}
-                onChange={(e) => setForm({ ...form, status: e.target.value })}
+                value={perfil}
+                onChange={(e) => setPerfil(e.target.value)}
               >
-                <option value="">Selecione o status</option>
-                <option value="Ativo">Ativo</option>
-                <option value="Inativo">Inativo</option>
+                <option value="">Selecione o tipo</option>
+                <option value="alunos">Aluno</option>
+                <option value="professores">Professor</option>
               </select>
-            )}
-
-            {!modoEdicao && (
-              <select
-                value={form.deficiencia || ""}
-                onChange={(e) => setForm({ ...form, deficiencia: e.target.value })}
-              >
-                <option value="">Possui Deficiência?</option>
-                <option value="sim">Sim</option>
-                <option value="nao">Não</option>
-              </select>
-            )}
-
-            {!modoEdicao && form.deficiencia === "sim" && (
-              <input
-                type="text"
-                placeholder="Tipo de Deficiência"
-                value={form.tipoDeficiencia || ""}
-                onChange={(e) => setForm({ ...form, tipoDeficiencia: e.target.value })}
-              />
-            )}
-
-            {!modoEdicao && (
-              <input
-                type="password"
-                placeholder="Senha"
-                value={form.senha || ""}
-                onChange={(e) => setForm({ ...form, senha: e.target.value })}
-              />
-            )}
-
-            <div className="modal-actions">
-              <button className="btn-secondary" onClick={onClose}>
-                Cancelar
-              </button>
-              <button className="btn-primary" onClick={onSubmit}>
-                {modoEdicao ? "Atualizar" : "Cadastrar"}
-              </button>
             </div>
-          </>
-        )}
+          )}
+
+          {perfil && (
+            <div className="form-grid">
+              <div className="form-group-modal full-width">
+                <label>Nome Completo</label>
+                <input
+                  type="text"
+                  placeholder="Ex: João Silva"
+                  value={form.nome || ""}
+                  onChange={(e) => setForm({ ...form, nome: e.target.value })}
+                />
+              </div>
+
+              {!modoEdicao && (
+                <div className="form-group-modal">
+                  <label>CPF</label>
+                  <input
+                    type="text"
+                    placeholder="000.000.000-00"
+                    value={form.cpf || ""}
+                    onChange={(e) => setForm({ ...form, cpf: e.target.value })}
+                  />
+                </div>
+              )}
+
+              <div className="form-group-modal">
+                <label>E-mail</label>
+                <input
+                  type="email"
+                  placeholder="email@escola.com"
+                  value={form.email || ""}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
+              </div>
+
+              {/* Lógica condicional para campos específicos */}
+              {perfil === "alunos" && (
+                <div className="form-group-modal">
+                  <label>Data de Nascimento</label>
+                  <input
+                    type="date"
+                    value={form.dataNascimento || ""}
+                    onChange={(e) =>
+                      setForm({ ...form, dataNascimento: e.target.value })
+                    }
+                  />
+                </div>
+              )}
+
+              <div className="form-group-modal">
+                <label>Matrícula</label>
+                <input
+                  type="number"
+                  placeholder="Nº Matrícula"
+                  value={form.matricula || ""}
+                  disabled={modoEdicao}
+                  onChange={(e) =>
+                    setForm({ ...form, matricula: e.target.value })
+                  }
+                />
+              </div>
+
+              {perfil === "professores" && (
+                <>
+                  <div className="form-group-modal">
+                    <label>Data de Admissão</label>
+                    <input
+                      type="date"
+                      value={form.dataAdmissao || ""}
+                      onChange={(e) =>
+                        setForm({ ...form, dataAdmissao: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="form-group-modal full-width">
+                    <label>Titulação</label>
+                    <input
+                      type="text"
+                      placeholder="Ex: Mestre"
+                      value={form.titulacao || ""}
+                      onChange={(e) =>
+                        setForm({ ...form, titulacao: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="form-group-modal full-width">
+                    <label>Formação Acadêmica</label>
+                    <input
+                      type="text"
+                      placeholder="Ex: Licenciatura em Matemática"
+                      value={form.formacaoAcademica || ""}
+                      onChange={(e) =>
+                        setForm({ ...form, formacaoAcademica: e.target.value })
+                      }
+                    />
+                  </div>
+                </>
+              )}
+
+              {!modoEdicao && (
+                <>
+                  <div className="form-group-modal">
+                    <label>Status</label>
+                    <select
+                      value={form.status || ""}
+                      onChange={(e) =>
+                        setForm({ ...form, status: e.target.value })
+                      }
+                    >
+                      <option value="">Selecione</option>
+                      <option value="Ativo">Ativo</option>
+                      <option value="Inativo">Inativo</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group-modal">
+                    <label>Possui Deficiência?</label>
+                    <select
+                      value={form.deficiencia || ""}
+                      onChange={(e) =>
+                        setForm({ ...form, deficiencia: e.target.value })
+                      }
+                    >
+                      <option value="">Selecione</option>
+                      <option value="sim">Sim</option>
+                      <option value="nao">Não</option>
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {form.deficiencia === "sim" && (
+                <div className="form-group-modal full-width">
+                  <label>Tipo de Deficiência</label>
+                  <input
+                    type="text"
+                    value={form.tipoDeficiencia || ""}
+                    onChange={(e) =>
+                      setForm({ ...form, tipoDeficiencia: e.target.value })
+                    }
+                  />
+                </div>
+              )}
+
+              {!modoEdicao && (
+                <div className="form-group-modal full-width">
+                  <label>Senha Provisória</label>
+                  <input
+                    type="password"
+                    placeholder="********"
+                    value={form.senha || ""}
+                    onChange={(e) =>
+                      setForm({ ...form, senha: e.target.value })
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="modal-footer">
+          <button className="btn-cancel" onClick={onClose}>
+            Cancelar
+          </button>
+          <button className="btn-submit" onClick={onSubmit}>
+            {modoEdicao ? "Salvar Alterações" : "Finalizar Cadastro"}
+          </button>
+        </div>
       </div>
     </div>
   );

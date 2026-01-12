@@ -20,7 +20,6 @@ type Usuario = {
   status: "Ativo" | "Inativo";
 };
 
-
 interface Aluno extends BaseUser {
   matricula: string;
   turma?: string;
@@ -42,7 +41,9 @@ export default function Usuarios() {
   // Modal
   const [modalAberto, setModalAberto] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [perfilModal, setPerfilModal] = useState<"alunos" | "professores" | "">("");
+  const [perfilModal, setPerfilModal] = useState<"alunos" | "professores" | "">(
+    ""
+  );
   const [form, setForm] = useState<any>({});
   const [usuarioEditando, setUsuarioEditando] = useState<any>(null);
 
@@ -55,7 +56,9 @@ export default function Usuarios() {
       ]);
 
       setAlunos(resAlunos.data.map((a: any) => ({ ...a, tipo: "Aluno" })));
-      setProfessores(resProf.data.map((p: any) => ({ ...p, tipo: "Professor" })));
+      setProfessores(
+        resProf.data.map((p: any) => ({ ...p, tipo: "Professor" }))
+      );
     };
 
     carregar();
@@ -79,14 +82,12 @@ export default function Usuarios() {
             : `http://localhost:3000/professor/${usuarioEditando.id}`;
         const { id, tipo, senha, status, ...dadosParaEnviar } = form;
 
-      const response = await axios.patch(endpoint, dadosParaEnviar);
-      setUsuarios((prev) =>
-        prev.map((u) =>
-          u.id === usuarioEditando.id ? response.data : u
-        )
-      );
+        const response = await axios.patch(endpoint, dadosParaEnviar);
+        setUsuarios((prev) =>
+          prev.map((u) => (u.id === usuarioEditando.id ? response.data : u))
+        );
       } else {
-        let dadosParaEnviar: any = { 
+        let dadosParaEnviar: any = {
           nome: form.nome,
           matricula: form.matricula,
           email: form.email,
@@ -120,7 +121,7 @@ export default function Usuarios() {
         const response = await axios.post(endpoint, dadosParaEnviar);
         setUsuarios((prev) => [...prev, response.data]);
       }
-      
+
       setModalAberto(false);
       // window.location.reload();
     } catch (err) {
@@ -187,28 +188,37 @@ export default function Usuarios() {
 
   return (
     <div className="container">
-      <h2>Gerenciamento de Usuários</h2>
+      <div className="header-users">
 
-      {/* Botão flutuante */}
-      <button
-        className="floating-add-btn"
-        title="Novo Usuário"
-        onClick={() => {
-          setModoEdicao(false);
-          setForm({});
-          setPerfilModal("");
-          setModalAberto(true);
-        }}
-      >
-        +
-      </button>
+        <div className="spacer"></div>
+
+        <div className="header-text">
+          <h1>Gerenciamento de Usuários</h1>
+          {/* <p>Visualize e gerencie as contas de alunos e professores.</p> */}
+        </div>
+
+        {/* Botão flutuante */}
+        <button
+          className="btn-add-user"
+          onClick={() => {
+            setModoEdicao(false);
+            setForm({});
+            setPerfilModal("");
+            setModalAberto(true);
+          }}
+        >
+          <span className="plus-icon">+</span> Add Usuário
+        </button>
+      </div>
 
       {/* Abas */}
       <div className="tabs-container">
         {["Todos", "Alunos", "Professores"].map((t) => (
           <button
             key={t}
-            className={`tab-button ${perfilExibido === t.toLowerCase() ? "active" : ""}`}
+            className={`tab-button ${
+              perfilExibido === t.toLowerCase() ? "active" : ""
+            }`}
             onClick={() => setPerfilExibido(t.toLowerCase())}
           >
             {t}
@@ -236,38 +246,11 @@ export default function Usuarios() {
         </select>
       </div>
 
-      {/* Tabela */}
-      {/* <table className="user-table">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>E-mail</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtrados.map((u) => (
-            <tr key={`${u.tipo}-${u.id}`}>
-              <td>{u.nome}</td>
-              <td>{u.email}</td>
-              <td>{u.status}</td>
-              <td className="acoes">
-                <button className="action-btn edit-btn" onClick={() => handleEditar(u)}>
-                  Editar
-                </button>
-                <button
-                  className="action-btn delete-btn"
-                  onClick={() => handleInativar(u)}
-                >
-                  {u.status === "Ativo" ? "Inativar" : "Ativar"}
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
-      <DataTable columns={columns} data={filtrados} emptyMessage="Nenhum usuário encontrado"/>
+      <DataTable
+        columns={columns}
+        data={filtrados}
+        emptyMessage="Nenhum usuário encontrado"
+      />
 
       {/* Modal */}
       <UsuarioModal
