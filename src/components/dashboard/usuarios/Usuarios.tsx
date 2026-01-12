@@ -68,10 +68,84 @@ export default function Usuarios() {
   const handleEditar = (usuario: any) => {
     setModoEdicao(true);
     setUsuarioEditando(usuario);
-    setPerfilModal(usuario.tipo === "Aluno" ? "alunos" : "professores");
-    setForm(usuario);
+
+    const perfil = usuario.tipo === "Aluno" ? "alunos" : "professores";
+    setPerfilModal(perfil);
+
+    const formAjustado = { ...usuario,
+      formacaoAcademica: usuario.formacaoAcad || "",
+    };
+
+    // ✅ Ajuste da data para input[type="date"]
+    if (perfil === "alunos" && usuario.dataNasc) {
+      formAjustado.dataNascimento = usuario.dataNasc.split("T")[0];
+    }
+
+    if (perfil === "professores" && usuario.dataAdmissao) {
+      formAjustado.dataAdmissao = usuario.dataAdmissao.split("T")[0];
+    }
+
+    setForm(formAjustado);
     setModalAberto(true);
   };
+
+
+  // const handleSubmit = async () => {
+  //   try {
+  //     if (modoEdicao) {
+  //       const endpoint =
+  //         perfilModal === "alunos"
+  //           ? `http://localhost:3000/aluno/${usuarioEditando.id}`
+  //           : `http://localhost:3000/professor/${usuarioEditando.id}`;
+  //       const { id, tipo, senha, status, ...dadosParaEnviar } = form;
+
+  //       const response = await axios.patch(endpoint, dadosParaEnviar);
+  //       setUsuarios((prev) =>
+  //         prev.map((u) => (u.id === usuarioEditando.id ? response.data : u))
+  //       );
+  //     } else {
+  //       let dadosParaEnviar: any = {
+  //         nome: form.nome,
+  //         matricula: form.matricula,
+  //         email: form.email,
+  //         cpf: form.cpf,
+  //         password: form.senha,
+  //         status: form.status,
+  //         deficiencia: form.deficiencia,
+  //         tipoDeficiencia: form.tipoDeficiencia || "",
+  //       };
+
+  //       if (perfilModal === "alunos") {
+  //         dadosParaEnviar = {
+  //           ...dadosParaEnviar,
+  //           dataNasc: form.dataNascimento,
+  //         };
+  //       }
+
+  //       if (perfilModal === "professores") {
+  //         dadosParaEnviar = {
+  //           ...dadosParaEnviar,
+  //           dataAdmissao: form.dataAdmissao,
+  //           titulacao: form.titulacao,
+  //           formacaoAcad: form.formacaoAcademica,
+  //         };
+  //       }
+  //       const endpoint =
+  //         perfilModal === "alunos"
+  //           ? "http://localhost:3000/aluno/registro"
+  //           : "http://localhost:3000/professor/registro";
+
+  //       const response = await axios.post(endpoint, dadosParaEnviar);
+  //       setUsuarios((prev) => [...prev, response.data]);
+  //     }
+
+  //     setModalAberto(false);
+  //     // window.location.reload();
+  //   } catch (err) {
+  //     console.error("Erro ao salvar usuário", err);
+  //     console.log("dados error:", err.response.data);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     try {
@@ -80,53 +154,41 @@ export default function Usuarios() {
           perfilModal === "alunos"
             ? `http://localhost:3000/aluno/${usuarioEditando.id}`
             : `http://localhost:3000/professor/${usuarioEditando.id}`;
-        const { id, tipo, senha, status, ...dadosParaEnviar } = form;
 
-        const response = await axios.patch(endpoint, dadosParaEnviar);
-        setUsuarios((prev) =>
-          prev.map((u) => (u.id === usuarioEditando.id ? response.data : u))
-        );
-      } else {
-        let dadosParaEnviar: any = {
+        let dados: any = {
           nome: form.nome,
-          matricula: form.matricula,
           email: form.email,
-          cpf: form.cpf,
-          password: form.senha,
-          status: form.status,
-          deficiencia: form.deficiencia,
-          tipoDeficiencia: form.tipoDeficiencia || "",
         };
 
         if (perfilModal === "alunos") {
-          dadosParaEnviar = {
-            ...dadosParaEnviar,
-            dataNasc: form.dataNascimento,
-          };
+          dados.dataNasc = form.dataNascimento;
         }
 
         if (perfilModal === "professores") {
-          dadosParaEnviar = {
-            ...dadosParaEnviar,
+          dados = {
+            ...dados,
             dataAdmissao: form.dataAdmissao,
             titulacao: form.titulacao,
             formacaoAcad: form.formacaoAcademica,
           };
         }
-        const endpoint =
-          perfilModal === "alunos"
-            ? "http://localhost:3000/aluno/registro"
-            : "http://localhost:3000/professor/registro";
 
-        const response = await axios.post(endpoint, dadosParaEnviar);
-        setUsuarios((prev) => [...prev, response.data]);
+        const res = await axios.patch(endpoint, dados);
+
+        if (perfilModal === "alunos") {
+          setAlunos((prev) =>
+            prev.map((a) => (a.id === usuarioEditando.id ? res.data : a))
+          );
+        } else {
+          setProfessores((prev) =>
+            prev.map((p) => (p.id === usuarioEditando.id ? res.data : p))
+          );
+        }
       }
 
       setModalAberto(false);
-      // window.location.reload();
-    } catch (err) {
-      console.error("Erro ao salvar usuário", err);
-      console.log("dados error:", err.response.data);
+    } catch (err: any) {
+      console.error("Erro ao salvar", err.response?.data);
     }
   };
 
