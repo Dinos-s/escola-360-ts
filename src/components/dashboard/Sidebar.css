@@ -1,20 +1,60 @@
-/* BASE DO SIDEBAR (DESKTOP) */
 .sidebar {
-  width: 240px;
+  width: 260px;
+  height: 100vh; /* Ocupa a altura toda da tela */
   background-color: var(--cor-card);
-  /* border-right: 1px solid #e0e0e0; */
   display: flex;
   flex-direction: column;
-  /* padding: 20px 0; */
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);  */
-  /* Sombra mais destacada 
   position: sticky;
   top: 0;
-  align-items: stretch;*/
-  transition: width 0.3s ease-in-out;
-  justify-content: space-between;
+  border-right: 1px solid #e0e0e0;
+  overflow: hidden; /* Impede que a sidebar inteira scrolle */
   border-radius: 12px;
-  padding: 20px 0;
+}
+
+/* Novo container para permitir scroll apenas nos links */
+.sidebar-top-wrapper {
+  flex: 1; /* Ocupa todo o espaço disponível entre o topo e o rodapé */
+  overflow-y: auto; /* Adiciona scroll se os links forem muitos */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilização da barra de rolagem para ficar discreta */
+.sidebar-top-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-top-wrapper::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.sidebar-header {
+  padding: 20px 0 10px;
+  flex-shrink: 0; /* Impede que o cabeçalho seja esmagado */
+  background-color: var(--cor-card);
+  z-index: 10;
+}
+
+.sidebar-divider {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 10px 20px 20px;
+}
+
+.hamburger-menu {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  background-color: var(--cor-principal);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Estado Colapsado */
@@ -144,10 +184,27 @@
 
 /* ================= NAV ================= */
 .sidebar-nav {
+  flex-grow: 1; /* Ocupa todo o espaço restante */
+  overflow-y: auto; /* Habilita o scroll apenas aqui */
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 0 12px;
+  gap: 4px;
+  padding: 0 15px 20px;
+}
+
+/* Estilização da barra de rolagem (Scrollbar) */
+.sidebar-nav::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+  border-radius: 10px;
+}
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: #b4b5b6;
 }
 
 /* Links */
@@ -175,14 +232,18 @@
 }
 
 .sidebar-footer {
-  padding: 10px;
-  font-size: 0.9em;
-  text-align: center;
+  padding: 20px;
+  background-color: var(
+    --cor-card
+  ); /* Garante que o fundo cubra os links ao scrollar */
+  border-top: 1px solid #eee;
+  flex-shrink: 0; /* Mantém o rodapé sempre visível no final */
 }
 
 .logout-btn {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
+  margin: 0;
   border-radius: 8px;
   border: none;
   background-color: #d30b0b;
@@ -201,105 +262,43 @@
 /* ================================================= */
 
 @media (max-width: 900px) {
-  /* Oculta elementos desktop */
-  .sidebar-logo.desktop-only,
-  .toggle-visibility-btn.desktop-only {
-    display: none !important;
+  .hamburger-menu {
+    display: block; /* Mostra o botão no mobile */
   }
 
   .sidebar {
-    width: 100%;
-    height: auto;
-    padding: 0;
-    border-right: none;
-    border-bottom: 1px solid #e0e0e0;
-    position: relative;
-  }
-
-  /* 1. Cabeçalho Mobile (Sempre visível, contém logo e ícone) */
-  .sidebar-header-mobile {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    width: 100%;
-    background-color: var(--cor-card);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .sidebar-header-mobile .sidebar-logo {
-    width: 120px;
-    margin: 0;
-  }
-
-  /* 2. Ícone Hambúrguer */
-  .menu-toggle {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 25px;
-    height: 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  .menu-toggle .bar {
-    width: 100%;
-    height: 3px;
-    background-color: var(--cor-principal);
-  }
-
-  /* 3. Conteúdo do Menu (Dropdown) */
-  .sidebar-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: var(--cor-card);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    left: -260px; /* Esconde o menu para a esquerda */
+    top: 0;
+    height: 100vh;
     z-index: 1000;
-    padding-bottom: 10px;
+    transition: left 0.3s ease-in-out;
+    border-radius: 0; /* Remove bordas arredondadas no mobile */
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
   }
 
-  .sidebar-content.mobile-open {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+  .sidebar.open {
+    left: 0; /* Mostra o menu */
   }
 
-  /* Ajustes internos do dropdown */
-  .user-greeting,
-  .sidebar-footer {
-    padding: 10px 20px;
-    text-align: left;
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
   }
 
-  .profile-switcher {
-    /* Mostra os botões de perfil dentro do dropdown mobile */
-    display: flex !important;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 10px;
-    padding: 15px 20px;
+  .sidebar-logo {
+    width: 120px;
+    margin-top: 40px; /* Espaço para não bater no botão fechar */
   }
 
-  /* Ajustes de borda no mobile */
-  .profile-switcher .sidebar-nav {
-    border-left: none; /* Remove a borda no mobile */
-    margin-top: 0;
-    background-color: transparent;
-  }
-
-  .profile-switcher .sidebar-nav a {
-    padding: 10px 30px; /* Mantém o padding do dropdown */
-    margin: 0;
-    border-radius: 0;
-    text-align: left;
-  }
-
-  .profile-nav a.active {
-    background-color: #f0f0f0;
-    color: var(--cor-principal);
+  /* Garante que o container principal não seja esmagado */
+  .main-container {
+    padding: 70px 20px 20px; /* Espaço para o botão hambúrguer no topo */
   }
 }
