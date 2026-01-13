@@ -1,4 +1,4 @@
-import { useEffect, useStat, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./CriaProfessor.css";
 
@@ -11,7 +11,7 @@ interface Professor {
   cpf: string;
   matricula: string;
   status: string;
-  dataAdmissão: string;
+  dataAdmissao: string;
   formacaoAcad: string;
   titulacao: string;
   deficiencia: string;
@@ -94,32 +94,50 @@ function CriaProfessor() {
       return;
     }
 
-    if (form.password.length < 6) {
+    if (!editId && form.password.length < 6) {
       setError("A senha deve ter pelo menos 6 caracteres.");
       return;
     }
 
+    if (editId && form.password && form.password.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    const payload = {
+      nome: form.nome,
+      email: form.email,
+      cpf: form.cpf,
+      matricula: form.matricula,
+      status: form.status,
+      dataAdmissao: form.dataAdmissao,
+      formacaoAcad: form.formacaoAcad,
+      titulacao: form.titulacao,
+      deficiencia: form.deficiencia,
+      tipoDeficiencia: form.tipoDeficiencia,
+      ...(form.password && { password: form.password }),
+    };
+
     try {
-      const response = await axios.post(
-        "http://localhost:3000/professor/registro",
-        form
-      );
+      if (editId) {
+        await axios.patch(
+          `http://localhost:3000/professor/${editId}`,
+          payload
+        );
 
-      setMessage(`Usuário ${response.data.nome} cadastrado com sucesso!`);
+        setMessage("Professor atualizado com sucesso!");
+      } else {
+        const response = await axios.post(
+          "http://localhost:3000/professor/registro",
+          payload
+        );
 
-      setForm({
-        nome: "",
-        email: "",
-        password: "",
-        cpf: "",
-        matricula: "",
-        status: "",
-        dataAdmissao: "",
-        formacaoAcad: "",
-        titulacao: "",
-        deficiencia: "",
-        tipoDeficiencia: "",
-      });
+        setMessage(`Usuário ${response.data.nome} cadastrado com sucesso!`);
+      }
+
+  limparForm();
+  setEditId(null);
+  buscarProfessores();
     } catch (err: any) {
       if (err.response && err.response.data) {
         const errorMessage = err.response.data.message;
@@ -208,7 +226,7 @@ function CriaProfessor() {
       email: p.email,
       cpf: p.cpf,
       matricula: p.matricula,
-      dataAdmissao: formatarParaInputDate(p.dataAdmissão),
+      dataAdmissao: formatarParaInputDate(p.dataAdmissao),
       formacaoAcad: p.formacaoAcad,
       titulacao: p.titulacao,
       status: p.status,
@@ -407,11 +425,15 @@ function CriaProfessor() {
               <label>Senha</label>
               <input
                 type="password"
-                placeholder="Digite a senha do Professor"
+                placeholder={
+                  editId
+                    ? "Deixe em branco para manter a senha atual"
+                    : "Digite a senha do professor"
+                }
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                required
+                required={!editId}
               />
             </div>
           </div>
@@ -420,7 +442,7 @@ function CriaProfessor() {
         {/* ---------- BOTÕES ---------- */}
         <div className="action-buttons">
           <button type="submit" className="save-btn">
-            Cadastrar
+            {editId ? "Atualizar" : "Cadastrar"}
           </button>
           <button type="button" className="cancel-btn" onClick={limparForm}>
             Cancelar

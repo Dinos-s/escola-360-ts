@@ -138,16 +138,18 @@ function Perfil() {
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label>Data de Nascimento</label>
-                        
-                        <input
-                            type="date"
-                            name="dataNasc"
-                            value={(form.dataNasc)}
-                            onChange={handleChange}
-                        />
-                    </div>
+                    {tipoUser !== 'professor' && (
+                        <div className="form-group">
+                            <label>Data de Nascimento</label>
+                            
+                            <input
+                                type="date"
+                                name="dataNasc"
+                                value={(form.dataNasc)}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    )}
 
                     <div className="form-group">
                         <label>CPF</label>
