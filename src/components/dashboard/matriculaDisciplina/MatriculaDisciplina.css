@@ -1,0 +1,22 @@
+.matricula-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+}
+
+.matricula-table th,
+.matricula-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.matricula-table th {
+    background-color: #f4f4f4;
+    font-weight: 600;
+}
+
+.table-title {
+    margin-top: 40px;
+    margin-bottom: 10px;
+}

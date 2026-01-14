@@ -1,40 +1,79 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import './ProfessorDiciplina.css';
+import './MatriculaDisciplina.css';
+import type { TableColumn } from '../../tabela/tabela';
 
-import { DataTable, type TableColumn } from '../../tabela/tabela';
- 
-type Diciplina = {
-  id: number;
-  nome: string;
+type Aluno = {
+    id: number;
+    nome: string;
 };
 
 type Turma = {
-  id: number;
-  nome: string;
+    id: number;
+    nome: string;
+};
+
+type Matricula = {
+    id: number;
+    anoLetivo: number;
+    aluno: Aluno;
+    turma: Turma;
 };
 
 type Professor = {
-  id: number;
-  nome: string;
+    id: number;
+    nome: string;
+};
+
+type Disciplina = {
+    id: number;
+    nome: string;
+};
+
+type TurmaPTD = {
+    id: number;
+    nome: string;
+    turno: string;
 };
 
 type ProfessorTurmaDisciplina = {
-  id: number;
-  professor?: Professor;
-  disciplina?: Diciplina;
-  turma?: Turma;
+    id: number;
+    professor: Professor;
+    disciplina: Disciplina;
+    turma: TurmaPTD;
 };
 
-function ProfessorDiciplina() {
-    const [diciplinas, setDiciplinas] = useState<Diciplina[]>([]);
-    const [turmas, setTurmas] = useState<Turma[]>([]);
-    const [professores, setProfessores] = useState<Professor[]>([]);
-    const [matricula, setMatricula] = useState<ProfessorTurmaDisciplina[]>([]);
+type MatriculaDisciplina = {
+  id: number;
+  matricula: {
+    anoLetivo: number;
+    aluno: {
+      nome: string;
+    };
+  };
+  professorTurmaDisciplina: {
+    professor: {
+      nome: string;
+    };
+    disciplina: {
+      nome: string;
+    };
+    turma: {
+      nome: string;
+      turno: string;
+    };
+  };
+};
+
+
+
+function MatriculaDisciplina() {
+    const [matricula, setMatricula] = useState<Matricula[]>([]);
+    const [professorTurmaDisciplina, setProfessorTurmaDisciplina] = useState<ProfessorTurmaDisciplina[]>([]);
+    const [matriculaDisciplina, setMatriculaDisciplina] = useState<MatriculaDisciplina[]>([]);
     const [form, setForm] = useState({
-        professorId: '',
-        disciplinaId: '',
-        turmaId: ''
+        matriculaId: '',
+        professorTurmaDisciplinaId: ''
     });
 
     const [messagem, setMessagem] = useState('');
@@ -43,22 +82,20 @@ function ProfessorDiciplina() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [professores, turmas, diciplinas, matricula] = await Promise.all([
-                    axios.get('http://localhost:3000/professor'),
-                    axios.get('http://localhost:3000/turma'),
-                    axios.get('http://localhost:3000/disciplina'),
+                const [matricula, professorTurmaDisciplina, matriculaDisciplina] = await Promise.all([
+                    axios.get('http://localhost:3000/matricula'),
                     axios.get("http://localhost:3000/turma-professor-disciplina"),
+                    axios.get("http://localhost:3000/matricula-disciplina"),
                 ]);
 
-                setDiciplinas(diciplinas.data);
-                setTurmas(turmas.data);
-                setProfessores(professores.data);
-                setMatricula(matricula.data);              
+                setMatricula(matricula.data);
+                setProfessorTurmaDisciplina(professorTurmaDisciplina.data);
+                setMatriculaDisciplina(matriculaDisciplina.data);
             } catch (error) {
                 console.error(error);
                 setMessagem('Erro ao buscar dados iniciais.');
                 setTipoMensagem('error');
-            } 
+            }
         };
 
         fetchData();
@@ -72,20 +109,17 @@ function ProfessorDiciplina() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:3000/turma-professor-disciplina', {
-                disciplinaId: Number(form.disciplinaId),
-                professorId: Number(form.professorId),
-                turmaId: Number(form.turmaId),
+            const res = await axios.post('http://localhost:3000/matricula-disciplina', {
+                professorTurmaDisciplinaId: Number(form.professorTurmaDisciplinaId),
+                matriculaId: Number(form.matriculaId),
             });
-            
-            setMatricula(prev => [...prev, res.data]);
+            setMatriculaDisciplina(prev => [...prev, res.data]);
             setMessagem('Matrícula realizada com sucesso!');
             setTipoMensagem('success');
 
             setForm({
-                professorId: '',
-                disciplinaId: '',
-                turmaId: ''
+                professorTurmaDisciplinaId: '',
+                matriculaId: ''
             });
         } catch (error: any) {
             setMessagem('Erro ao realizar matrícula.');
@@ -93,27 +127,41 @@ function ProfessorDiciplina() {
         }
     };
 
-    const columns: TableColumn<ProfessorTurmaDisciplina>[] = [
-        {
-            key: 'professor', 
-            header: 'Professor', 
-            render: (row) => row.professor?.nome || '' 
-        },
-        { 
-            key: 'disciplina', 
-            header: 'Disciplina', 
-            render: (row) => row.disciplina?.nome || '' 
-        },
-        { 
-            key: 'turma', 
-            header: 'Turma', 
-            render: (row) => row.turma?.nome || '' 
-        },
-    ];
+    // const columns: TableColumn<MatriculaDisciplina>[] = [
+    //     {
+    //         key: 'anoLetivo',
+    //         header: 'Ano Letivo',
+    //         render: (row) => row.matricula.anoLetivo,
+    //     },
+    //     {
+    //         key: 'aluno',
+    //         header: 'Aluno',
+    //         render: (row) => row.matricula.aluno.nome,
+    //     },
+    //     {
+    //         key: 'disciplina',
+    //         header: 'Disciplina',
+    //         render: (row) =>
+    //             row.professorTurmaDisciplina.disciplina.nome,
+    //     },
+    //     {
+    //         key: 'professor',
+    //         header: 'Professor',
+    //         render: (row) =>
+    //             row.professorTurmaDisciplina.professor.nome,
+    //     },
+    //     {
+    //         key: 'turma',
+    //         header: 'Turma',
+    //         render: (row) =>
+    //             `${row.professorTurmaDisciplina.turma.nome} (${row.professorTurmaDisciplina.turma.turno})`,
+    //     },
+    // ];
+
 
     return (
         <div className="main-container">
-            <h1 className="matricula-title">Matrícula e Disciplina</h1>
+            <h1 className="matricula-title">Vincular Aluno e Disciplina</h1>
             {messagem && (
                 <p className={`feedback-message ${tipoMensagem}`}>
                     {messagem}
@@ -122,37 +170,37 @@ function ProfessorDiciplina() {
 
             <form onSubmit={handleSubmit}>
                 <div className="column">
+
+                    {/* MATRÍCULA */}
                     <div className="form-group">
-                        <label>Professor</label>
-                        <select name="professorId" value={form.professorId} onChange={handleChange}>
-                            <option value="">Selecione um professor</option>
-                            {professores.map((professor) => (
-                                <option key={professor.id} value={professor.id}>
-                                    {professor.nome}
+                        <label>Matrícula</label>
+                        <select
+                            name="matriculaId"
+                            value={form.matriculaId}
+                            onChange={handleChange}
+                        >
+                            <option value="">Selecione</option>
+                            {matricula.map(m => (
+                                <option key={m.id} value={m.id}>
+                                    {m.aluno.nome} – {m.anoLetivo}
                                 </option>
                             ))}
                         </select>
                     </div>
 
+                    {/* PROFESSOR / DISCIPLINA / TURMA */}
                     <div className="form-group">
-                        <label>Disciplina</label>
-                        <select name="disciplinaId" value={form.disciplinaId} onChange={handleChange}>
-                            <option value="">Selecione uma disciplina</option>
-                            {diciplinas.map((disciplina) => (
-                                <option key={disciplina.id} value={disciplina.id}>
-                                    {disciplina.nome}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label>Turma</label>
-                        <select name="turmaId" value={form.turmaId} onChange={handleChange}>
-                            <option value="">Selecione uma turma</option>
-                            {turmas.map((turma) => (
-                                <option key={turma.id} value={turma.id}>
-                                    {turma.nome}
+                        <label>Professor / Disciplina / Turma</label>
+                        <select
+                            name="professorTurmaDisciplinaId"
+                            value={form.professorTurmaDisciplinaId}
+                            onChange={handleChange}
+                        >
+                            <option value="">Selecione</option>
+                            {professorTurmaDisciplina.map(item => (
+                                <option key={item.id} value={item.id}>
+                                    {item.disciplina.nome} – Prof. {item.professor.nome} –{' '}
+                                    {item.turma.nome} ({item.turma.turno})
                                 </option>
                             ))}
                         </select>
@@ -215,11 +263,11 @@ function ProfessorDiciplina() {
 
             <h2 className="table-title">Matrículas Cadastradas</h2>
 
-            {/* <table className="matricula-table">
+            <table className="matricula-table">
                 <thead>
                     <tr>
-                        <th>Professor</th>
-                        <th>Disciplina</th>
+                        <th>Ano Letivo</th>
+                        <th>Aluno</th>
                         <th>Turma</th>
                     </tr>
                 </thead>
@@ -233,21 +281,16 @@ function ProfessorDiciplina() {
                     ) : (
                         matricula.map(matricula => (
                             <tr key={matricula.id}>
-                                <td>{(matricula.disciplina?.nome)}</td>
-                                <td>{matricula.professor?.nome}</td>
+                                <td>{matricula.anoLetivo}</td>
+                                <td>{matricula.aluno?.nome}</td>
                                 <td>{matricula.turma?.nome}</td>
                             </tr>
                         ))
                     )}
                 </tbody>
-            </table> */}
-            <DataTable
-                columns={columns}
-                data={matricula}
-                emptyMessage="Nenhuma matrícula e disciplina cadastrada"
-            />
+            </table>
         </div>
     )
 }
 
-export default ProfessorDiciplina
+export default MatriculaDisciplina

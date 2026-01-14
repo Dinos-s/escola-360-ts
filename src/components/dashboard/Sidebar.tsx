@@ -35,10 +35,8 @@ const ROTAS_COORDENADOR = [
   { to: "/dashboard/disciplina", name: "Criar Disciplina" },
   { to: "/dashboard/turma", name: "Criar Turma" },
   { to: "/dashboard/matricula", name: "Criar Matrícula" },
-  {
-    to: "/dashboard/professorDiciplina",
-    name: "Vincular Professor e Disciplina",
-  },
+  { to: "/dashboard/matriculaDisciplina", name: "Matrícula e Disciplina" },
+  { to: "/dashboard/professorDiciplina", name: "Vincular Professor e Disciplina" },
   { to: "/dashboard/perfil", name: "Meu Perfil" },
   { to: "/dashboard/trocaSenha", name: "Trocar Senha" },
   { to: "/dashboard/criaAluno", name: "Criar Aluno" },
