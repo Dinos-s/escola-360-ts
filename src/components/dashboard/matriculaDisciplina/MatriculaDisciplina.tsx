@@ -1,103 +1,62 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './MatriculaDisciplina.css';
-import type { TableColumn } from '../../tabela/tabela';
+import { DataTable, type TableColumn } from '../../tabela/tabela';
 
-type Aluno = {
-    id: number;
-    nome: string;
-};
-
-type Turma = {
-    id: number;
-    nome: string;
-};
-
+// 1. Ajuste das Tipagens para refletir o que você usa na tabela
 type Matricula = {
     id: number;
-    anoLetivo: number;
-    aluno: Aluno;
-    turma: Turma;
-};
-
-type Professor = {
-    id: number;
-    nome: string;
-};
-
-type Disciplina = {
-    id: number;
-    nome: string;
-};
-
-type TurmaPTD = {
-    id: number;
-    nome: string;
-    turno: string;
+    anoLetivo?: string;
+    aluno?: { nome: string };
+    turma?: { nome: string };
 };
 
 type ProfessorTurmaDisciplina = {
     id: number;
-    professor: Professor;
-    disciplina: Disciplina;
-    turma: TurmaPTD;
+    // Adicione outras propriedades se desejar exibir o nome do professor/disciplina no select
 };
 
 type MatriculaDisciplina = {
-  id: number;
-  matricula: {
-    anoLetivo: number;
-    aluno: {
-      nome: string;
+    id: number;
+    matricula: {
+        anoLetivo: string;
+        aluno: { nome: string };
+        turma: { nome: string };
     };
-  };
-  professorTurmaDisciplina: {
-    professor: {
-      nome: string;
+    turmaProfessorDisciplina: {
+        professor: { nome: string };
+        disciplina: { nome: string };
+        turma: { nome: string };
     };
-    disciplina: {
-      nome: string;
-    };
-    turma: {
-      nome: string;
-      turno: string;
-    };
-  };
 };
 
-
-
 function MatriculaDisciplina() {
-    const [matricula, setMatricula] = useState<Matricula[]>([]);
+    const [matriculas, setMatriculas] = useState<Matricula[]>([]);
     const [professorTurmaDisciplina, setProfessorTurmaDisciplina] = useState<ProfessorTurmaDisciplina[]>([]);
     const [matriculaDisciplina, setMatriculaDisciplina] = useState<MatriculaDisciplina[]>([]);
-    const [form, setForm] = useState({
-        matriculaId: '',
-        professorTurmaDisciplinaId: ''
-    });
-
+    const [form, setForm] = useState({ matriculaId: '', turmaProfessorDisciplinaId: '' });
     const [messagem, setMessagem] = useState('');
-    const [tipoMensagem, setTipoMensagem] = useState<'success' | 'error' | ''>(''); // 'success' ou 'error'
+    const [tipoMensagem, setTipoMensagem] = useState<'success' | 'error' | ''>('');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [matricula, professorTurmaDisciplina, matriculaDisciplina] = await Promise.all([
+                const [resMatricula, resPTD, resMD] = await Promise.all([
                     axios.get('http://localhost:3000/matricula'),
                     axios.get("http://localhost:3000/turma-professor-disciplina"),
                     axios.get("http://localhost:3000/matricula-disciplina"),
                 ]);
+                console.log("MD", resMD.data);
 
-                setMatricula(matricula.data);
-                setProfessorTurmaDisciplina(professorTurmaDisciplina.data);
-                setMatriculaDisciplina(matriculaDisciplina.data);
+                setMatriculas(resMatricula.data);
+                setProfessorTurmaDisciplina(resPTD.data);
+                setMatriculaDisciplina(resMD.data);
             } catch (error) {
                 console.error(error);
                 setMessagem('Erro ao buscar dados iniciais.');
                 setTipoMensagem('error');
             }
         };
-
         fetchData();
     }, []);
 
@@ -108,60 +67,62 @@ function MatriculaDisciplina() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!form.matriculaId || !form.turmaProfessorDisciplinaId) {
+            setMessagem('Por favor, selecione todos os campos.');
+            setTipoMensagem('error');
+            return;
+        }
+
         try {
+            // Nota: Verifique se o endpoint para VINCULAR é realmente /matricula ou /matricula-disciplina
             const res = await axios.post('http://localhost:3000/matricula-disciplina', {
-                professorTurmaDisciplinaId: Number(form.professorTurmaDisciplinaId),
+                turmaProfessorDisciplinaId: Number(form.turmaProfessorDisciplinaId),
                 matriculaId: Number(form.matriculaId),
             });
-            setMatriculaDisciplina(prev => [...prev, res.data]);
-            setMessagem('Matrícula realizada com sucesso!');
-            setTipoMensagem('success');
 
+            // Atualiza a lista (se o back-end retornar o objeto populado) ou recarrega os dados
+            setMessagem('Vínculo realizado com sucesso!');
+            setTipoMensagem('success');
             setForm({
-                professorTurmaDisciplinaId: '',
+                turmaProfessorDisciplinaId: '',
                 matriculaId: ''
             });
+
+            // Opcional: Recarregar lista após sucesso para garantir que dados novos (aluno/turma) apareçam
+            // fetchData(); 
         } catch (error: any) {
-            setMessagem('Erro ao realizar matrícula.');
+            setMessagem('Erro ao realizar vínculo.');
             setTipoMensagem('error');
         }
     };
 
-    // const columns: TableColumn<MatriculaDisciplina>[] = [
-    //     {
-    //         key: 'anoLetivo',
-    //         header: 'Ano Letivo',
-    //         render: (row) => row.matricula.anoLetivo,
-    //     },
-    //     {
-    //         key: 'aluno',
-    //         header: 'Aluno',
-    //         render: (row) => row.matricula.aluno.nome,
-    //     },
-    //     {
-    //         key: 'disciplina',
-    //         header: 'Disciplina',
-    //         render: (row) =>
-    //             row.professorTurmaDisciplina.disciplina.nome,
-    //     },
-    //     {
-    //         key: 'professor',
-    //         header: 'Professor',
-    //         render: (row) =>
-    //             row.professorTurmaDisciplina.professor.nome,
-    //     },
-    //     {
-    //         key: 'turma',
-    //         header: 'Turma',
-    //         render: (row) =>
-    //             `${row.professorTurmaDisciplina.turma.nome} (${row.professorTurmaDisciplina.turma.turno})`,
-    //     },
-    // ];
-
+    const columns: TableColumn<MatriculaDisciplina>[] = [
+    {
+        key: 'aluno',
+        header: 'Aluno',
+        render: (row) => row.matricula?.aluno?.nome || '',
+    },
+    {
+        key: 'turma',
+        header: 'Turma',
+        render: (row) => row.matricula?.turma?.nome || '',
+    },
+    {
+        key: 'disciplina',
+        header: 'Disciplina',
+        render: (row) => row.turmaProfessorDisciplina?.disciplina?.nome || '',
+    },
+    {
+        key: 'professor',
+        header: 'Professor',
+        render: (row) => row.turmaProfessorDisciplina?.professor?.nome || '',
+    },
+    ];
 
     return (
         <div className="main-container">
             <h1 className="matricula-title">Vincular Aluno e Disciplina</h1>
+
             {messagem && (
                 <p className={`feedback-message ${tipoMensagem}`}>
                     {messagem}
@@ -170,100 +131,36 @@ function MatriculaDisciplina() {
 
             <form onSubmit={handleSubmit}>
                 <div className="column">
-
-                    {/* MATRÍCULA */}
                     <div className="form-group">
-                        <label>Matrícula</label>
-                        <select
-                            name="matriculaId"
-                            value={form.matriculaId}
-                            onChange={handleChange}
-                        >
-                            <option value="">Selecione</option>
-                            {matricula.map(m => (
+                        <label>Matrícula do Aluno (ID)</label>
+                        <select name="matriculaId" value={form.matriculaId} onChange={handleChange}>
+                            <option value="">Selecione uma matrícula</option>
+                            {matriculas.map((m) => (
                                 <option key={m.id} value={m.id}>
-                                    {m.aluno.nome} – {m.anoLetivo}
+                                    {m.turma?.nome} - {m.aluno?.nome || 'Sem nome'}
                                 </option>
                             ))}
                         </select>
                     </div>
 
-                    {/* PROFESSOR / DISCIPLINA / TURMA */}
                     <div className="form-group">
-                        <label>Professor / Disciplina / Turma</label>
-                        <select
-                            name="professorTurmaDisciplinaId"
-                            value={form.professorTurmaDisciplinaId}
-                            onChange={handleChange}
-                        >
-                            <option value="">Selecione</option>
-                            {professorTurmaDisciplina.map(item => (
-                                <option key={item.id} value={item.id}>
-                                    {item.disciplina.nome} – Prof. {item.professor.nome} –{' '}
-                                    {item.turma.nome} ({item.turma.turno})
+                        <label>Turma / Professor / Disciplina</label>
+                        <select name="turmaProfessorDisciplinaId" value={form.turmaProfessorDisciplinaId} onChange={handleChange}>
+                            <option value="">Selecione uma turma</option>
+                            {professorTurmaDisciplina.map((ptd) => (
+                                <option key={ptd.id} value={ptd.id}>
+                                    {ptd.disciplina.nome || 'Sem nome'} - {ptd.professor.nome || 'Sem professor'} - {ptd.turma.nome || 'Sem turma'}
                                 </option>
                             ))}
                         </select>
                     </div>
 
-                    <button type="submit" className="save-btn">Enviar</button>
+                    <button type="submit" className="save-btn">Vincular</button>
                 </div>
             </form>
 
-            {/* TABELA */}
-            {/* <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-lg font-semibold text-gray-700 mb-4">
-                    Matrículas Cadastradas
-                </h2>
-
-                <div className="overflow-x-auto">
-                    <table className="min-w-full text-sm">
-                        <thead>
-                            <tr className="bg-gray-100 text-gray-600">
-                                <th className="px-4 py-3 text-center font-medium">
-                                    Ano Letivo
-                                </th>
-                                <th className="px-4 py-3 text-center font-medium">
-                                    Aluno
-                                </th>
-                                <th className="px-4 py-3 text-center font-medium">
-                                    Turma
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className='divide-y'>
-                            {matricula.length === 0 ? (
-                                <tr>
-                                    <td colSpan={3} className="px-4 py-6 text-center text-gray-500">
-                                        Nenhuma matrícula cadastrada
-                                    </td>
-                                </tr>
-                            ) : (
-                                matricula.map(m => (
-                                    <tr
-                                        key={m.id}
-                                        className="border-b last:border-none hover:bg-gray-50"
-                                    >
-                                        <td className="px-4 py-3">
-                                            {new Date(m.anoLetivo).getFullYear()}
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            {m.aluno?.nome}
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            {m.turma?.nome}
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div> */}
-
             <h2 className="table-title">Matrículas Cadastradas</h2>
-
-            <table className="matricula-table">
+            {/* <table className="matricula-table">
                 <thead>
                     <tr>
                         <th>Ano Letivo</th>
@@ -272,25 +169,30 @@ function MatriculaDisciplina() {
                     </tr>
                 </thead>
                 <tbody>
-                    {matricula.length === 0 ? (
+                    {matriculas.length === 0 ? (
                         <tr>
                             <td colSpan={3} style={{ textAlign: "center" }}>
                                 Nenhuma matrícula cadastrada
                             </td>
                         </tr>
                     ) : (
-                        matricula.map(matricula => (
-                            <tr key={matricula.id}>
-                                <td>{matricula.anoLetivo}</td>
-                                <td>{matricula.aluno?.nome}</td>
-                                <td>{matricula.turma?.nome}</td>
+                        matriculaDisciplina.map(m => (
+                            <tr key={m.id}>
+                                <td>{m.matricula.anoLetivo ? new Date(m.matricula.anoLetivo).getFullYear() : 'N/A'}</td>
+                                <td>{m.matricula.aluno?.nome || 'N/A'}</td>
+                                <td>{m.matricula.turma?.nome || 'N/A'}</td>
                             </tr>
                         ))
                     )}
                 </tbody>
-            </table>
+            </table> */}
+            <DataTable
+                columns={columns}
+                data={matriculaDisciplina}
+                emptyMessage="Nenhuma matrícula e disciplina cadastrada"
+            />
         </div>
-    )
+    );
 }
 
-export default MatriculaDisciplina
+export default MatriculaDisciplina;

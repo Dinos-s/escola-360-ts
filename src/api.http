@@ -23,7 +23,7 @@ content-type: application/json
 
 ###
 
-GET http://localhost:3000/administrativo/1
+GET http://localhost:3000/administrativo/
 
 ###
 
@@ -32,3 +32,6 @@ Content-Type: application/json
 {
   "status": "inativa"
 }
+
+### 
+GET http://localhost:3000/matricula-disciplina
