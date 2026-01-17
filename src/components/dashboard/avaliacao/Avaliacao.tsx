@@ -86,8 +86,20 @@ function Avaliacao() {
       try {
         const professorId = localStorage.getItem("id");
 
+        if (!professorId) {
+          setError("Professor não identificado");
+          return;
+        }
+
         const [resTPD, resAV] = await Promise.all([
-          axios.get("http://localhost:3000/turma-professor-disciplina"),
+          axios.get(
+          "http://localhost:3000/turma-professor-disciplina/professor",
+          {
+            headers: {
+              "professor-id": professorId,
+            },
+          }
+        ),
           axios.get(
             `http://localhost:3000/avaliacao/professor/${professorId}`
           ),
