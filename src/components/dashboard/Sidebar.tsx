@@ -13,6 +13,7 @@ const ROTAS_ALUNO = [
   { to: "/dashboard/boletim", name: "Boletim" },
   { to: "/dashboard/historico", name: "Histórico" },
   { to: "/dashboard/calendario", name: "Calendário" },
+  { to: "/dashboard/envioAtividade", name: "Envio de Avaliação" },
   // { to: "/dashboard/calendario", name: "Gestão de Eventos" },
   { to: "/dashboard/perfil", name: "Perfil" },
   { to: "/dashboard/trocaSenha", name: "Trocar Senha" },

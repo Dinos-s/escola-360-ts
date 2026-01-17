@@ -239,12 +239,12 @@ function CriaProfessor() {
   const columns: TableColumn<Professor>[] = [
     { key: "matricula", header: "Matrícula" },
     { key: "nome", header: "Nome" },
-    // { key: "email", header: "E-mail" },
+    { key: "email", header: "E-mail" },
     // { key: "cpf", header: "CPF" },
     // { key: "dataAdmissao", header: "Data de Admissão" },
     // { key: "status", header: "Status" },
-    // { key: 'formacaoAcad', header: 'Formação Acadêmica'},
-    // { key: 'titulacao', header: 'Titulação'},
+    { key: 'formacaoAcad', header: 'Formação Acadêmica'},
+    { key: 'titulacao', header: 'Titulação'},
     {
       key: "acoes",
       header: "Ações",
@@ -396,7 +396,7 @@ function CriaProfessor() {
               >
                 <option value="">Selecione</option>
                 <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
+                <option value="Nao">Não</option>
               </select>
             </div>
 

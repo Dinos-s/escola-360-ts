@@ -38,6 +38,8 @@ function CriaAluno() {
   const buscarAlunos = async () => {
     try {
       const response = await axios.get("http://localhost:3000/aluno");
+      console.log(response.data);
+      
       setAlunos(response.data);
     } catch {
       setError("Erro ao carregar alunos");
@@ -91,30 +93,48 @@ function CriaAluno() {
       return;
     }
 
-    if (form.password.length < 6) {
+    if (!editId && form.password.length < 6) {
       setError("A senha deve ter pelo menos 6 caracteres.");
       return;
     }
 
+    if (editId && form.password && form.password.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    const payload = {
+      nome: form.nome,
+      email: form.email,
+      cpf: form.cpf,
+      matricula: form.matricula,
+      status: form.status,
+      deficiencia: form.deficiencia,
+      tipoDeficiencia: form.tipoDeficiencia,
+      dataNasc: form.dataNasc,
+      ...(form.password && { password: form.password }),
+    };
+
     try {
-      const response = await axios.post(
-        "http://localhost:3000/aluno/registro",
-        form
-      );
+      if (editId) {
+        await axios.patch(
+          `http://localhost:3000/aluno/${editId}`,
+          payload
+        );
 
-      setMessage(`Usuário ${response.data.nome} cadastrado com sucesso!`);
+        setMessage("Aluno atualizado com sucesso!");
+      } else {
+        const response = await axios.post(
+          "http://localhost:3000/aluno/registro",
+          payload
+        );
+        
+        setMessage(`Usuário ${response.data.nome} cadastrado com sucesso!`);
+      }
 
-      setForm({
-        nome: "",
-        email: "",
-        password: "",
-        cpf: "",
-        matricula: "",
-        status: "",
-        deficiencia: "",
-        tipoDeficiencia: "",
-        dataNasc: "",
-      });
+      limparForm();
+      setEditId(null);
+      buscarAlunos();
     } catch (err: any) {
       if (err.response && err.response.data) {
         const errorMessage = err.response.data.message;
@@ -349,7 +369,7 @@ function CriaAluno() {
               >
                 <option value="">Selecione</option>
                 <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
+                <option value="Nao">Não</option>
               </select>
             </div>
 
@@ -379,18 +399,19 @@ function CriaAluno() {
               <input
                 type="password"
                 name="password"
-                placeholder="Senha de acesso do Aluno"
+                placeholder={editId ? "Deixe em branco para manter a senha atual" : "Senha de acesso do Aluno"}
                 value={form.password}
                 onChange={handleChange}
-                required
+                required={!editId}
               />
             </div>
           </div>
         </div>
+
         {/* ---------- BOTÕES ---------- */}
         <div className="action-buttons">
           <button type="submit" className="save-btn">
-            Cadastrar
+            {editId ? "Atualizar" : "Cadastrar"}
           </button>
           <button type="button" className="cancel-btn" onClick={limparForm}>
             Cancelar

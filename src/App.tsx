@@ -26,6 +26,7 @@ import Matricula from './components/dashboard/matricula/Matricula'
 import ProfessorDiciplina from './components/dashboard/professorDiciplina/ProfessorDiciplina'
 import MatriculaDisciplina from './components/dashboard/matriculaDisciplina/MatriculaDisciplina'
 import Avaliacao from './components/dashboard/avaliacao/Avaliacao'
+import EnvioAtividade from './components/dashboard/envioAtividade/EnvioAtividade'
 
 function ProtectedRoute({ children }: any) {
   const token = localStorage.getItem("authToken");
@@ -79,6 +80,12 @@ function App() {
         <Route path="historico" element={
           <RoleBasedRoute allowed={["aluno"]}>
             <Historico />
+          </RoleBasedRoute>
+        } />
+
+        <Route path="envioAtividade" element={
+          <RoleBasedRoute allowed={["aluno"]}>
+            <EnvioAtividade />
           </RoleBasedRoute>
         } />
 
