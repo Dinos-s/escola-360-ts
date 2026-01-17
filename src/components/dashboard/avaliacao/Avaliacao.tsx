@@ -69,15 +69,21 @@ function Avaliacao() {
           "http://localhost:3000/turma-professor-disciplina"
         );
 
+        console.log("TurmaProfessorDisciplina:", res.data);
         setTurmaProfessorDisciplina(res.data);
 
-        const turmasMap = new Map<number, { id: number; nome: string }>();
+        // Turmas únicas que EXISTEM no vínculo
+        const turmasUnicas = Array.from(
+          new Map(
+            res.data.map((item: TurmaProfessorDisciplina) => [
+              item.turma.id,
+              item.turma,
+            ])
+          ).values()
+        );
 
-        res.data.forEach((item: TurmaProfessorDisciplina) => {
-          turmasMap.set(item.turma.id, item.turma);
-        });
-
-        setTurmasUnicas(Array.from(turmasMap.values()));
+        console.log("turmas:", turmasUnicas);
+        setTurmasUnicas(turmasUnicas);
       } catch {
         setError("Erro ao buscar dados.");
       }
@@ -214,10 +220,24 @@ function Avaliacao() {
         <div className="profile-fields">
           {/* COLUNA 1 */}
           <div className="column">
+
+            <div className="form-group">
+              <label>Turma</label>
+              <select value={form.turmaId} onChange={handleTurmaChange} required>
+                <option value="">Selecione</option>
+                {turmasUnicas.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.nome}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="form-group">
               <label>Título</label>
               <input
                 name="titulo"
+                placeholder="Descreva a prova"
                 value={form.titulo}
                 onChange={handleChange}
                 required
@@ -242,22 +262,10 @@ function Avaliacao() {
                 required
               >
                 <option value="">Selecione</option>
-                <option value="B1">B1</option>
-                <option value="B2">B2</option>
-                <option value="B3">B3</option>
-                <option value="B4">B4</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Turma</label>
-              <select value={form.turmaId} onChange={handleTurmaChange} required>
-                <option value="">Selecione</option>
-                {turmasUnicas.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.nome}
-                  </option>
-                ))}
+                <option value="B1">1° Bimestre</option>
+                <option value="B2">2° Bimestre</option>
+                <option value="B3">3° Bimestre</option>
+                <option value="B4">4° Bimestre</option>
               </select>
             </div>
 
@@ -269,14 +277,6 @@ function Avaliacao() {
 
           {/* COLUNA 2 */}
           <div className="column">
-            <div className="form-group">
-              <label>Ano Letivo</label>
-              <input
-                name="anoLetivo"
-                value={form.anoLetivo}
-                onChange={handleChange}
-              />
-            </div>
 
             <div className="form-group">
               <label>Disciplina</label>
@@ -295,9 +295,19 @@ function Avaliacao() {
             </div>
 
             <div className="form-group">
+              <label>Ano Letivo</label>
+              <input
+                name="anoLetivo"
+                value={form.anoLetivo}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group">
               <label>Descrição</label>
               <textarea
                 name="descricao"
+                placeholder="Descreva a prova"
                 value={form.descricao}
                 onChange={handleChange}
               />
