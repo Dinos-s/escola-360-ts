@@ -21,6 +21,7 @@ const ROTAS_ALUNO = [
 const ROTAS_PROFESSOR = [
   { to: "/dashboard", name: "Mural", end: true },
   { to: "/dashboard/notas", name: "Notas" },
+  { to: "/dashboard/avaliacao", name: "Avaliação" },
   { to: "/dashboard/presenca", name: "Presença" },
   { to: "/dashboard/perfil", name: "Perfil" },
   { to: "/dashboard/trocaSenha", name: "Trocar Senha" },

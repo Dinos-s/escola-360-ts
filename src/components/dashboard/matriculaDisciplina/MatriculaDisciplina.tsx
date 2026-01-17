@@ -34,7 +34,12 @@ function MatriculaDisciplina() {
     const [matriculas, setMatriculas] = useState<Matricula[]>([]);
     const [professorTurmaDisciplina, setProfessorTurmaDisciplina] = useState<ProfessorTurmaDisciplina[]>([]);
     const [matriculaDisciplina, setMatriculaDisciplina] = useState<MatriculaDisciplina[]>([]);
-    const [form, setForm] = useState({ matriculaId: '', turmaProfessorDisciplinaId: '' });
+    const [form, setForm] = useState(
+        { 
+            matriculaId: '', 
+            turmaProfessorDisciplinaId: '' 
+        }
+    );
     const [messagem, setMessagem] = useState('');
     const [tipoMensagem, setTipoMensagem] = useState<'success' | 'error' | ''>('');
 
@@ -46,7 +51,6 @@ function MatriculaDisciplina() {
                     axios.get("http://localhost:3000/turma-professor-disciplina"),
                     axios.get("http://localhost:3000/matricula-disciplina"),
                 ]);
-                console.log("MD", resMD.data);
 
                 setMatriculas(resMatricula.data);
                 setProfessorTurmaDisciplina(resPTD.data);
