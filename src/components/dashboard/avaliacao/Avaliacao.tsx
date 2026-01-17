@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./Avaliacao.css";
+import { DataTable, type TableColumn } from "../../tabela/tabela";
 
 /* ================= TIPAGENS ================= */
 
@@ -27,6 +28,24 @@ type AvaliacaoForm = {
   ficheiro: File | null;
 };
 
+type Avaliacao = {
+  id: number;
+  titulo: string;
+  tipo: string;
+  periodo: string;
+  anoLetivo: string;
+  descricao: string;
+  visivelParaAluno: boolean;
+  turma: {
+    id: number;
+    nome: string;
+  };
+  disciplina: {
+    id: number;
+    nome: string;
+  };
+};
+
 function Avaliacao() {
   const anoAtual = new Date().getFullYear().toString();
 
@@ -34,13 +53,13 @@ function Avaliacao() {
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [avaliacoes, setAvaliacao] = useState<Avaliacao[]>([]);
 
   const [turmaProfessorDisciplina, setTurmaProfessorDisciplina] =
     useState<TurmaProfessorDisciplina[]>([]);
 
-  const [turmasUnicas, setTurmasUnicas] = useState<
-    { id: number; nome: string }[]
-  >([]);
+  const [turmasUnicas, setTurmasUnicas] =
+    useState<{ id: number; nome: string }[]>([]);
 
   const [disciplinasFiltradas, setDisciplinasFiltradas] =
     useState<TurmaProfessorDisciplina[]>([]);
@@ -65,24 +84,27 @@ function Avaliacao() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:3000/turma-professor-disciplina"
-        );
+        const professorId = localStorage.getItem("id");
 
-        console.log("TurmaProfessorDisciplina:", res.data);
-        setTurmaProfessorDisciplina(res.data);
+        const [resTPD, resAV] = await Promise.all([
+          axios.get("http://localhost:3000/turma-professor-disciplina"),
+          axios.get(
+            `http://localhost:3000/avaliacao/professor/${professorId}`
+          ),
+        ]);
 
-        // Turmas únicas que EXISTEM no vínculo
+        setTurmaProfessorDisciplina(resTPD.data);
+        setAvaliacao(resAV.data);
+
         const turmasUnicas = Array.from(
           new Map(
-            res.data.map((item: TurmaProfessorDisciplina) => [
+            resTPD.data.map((item: TurmaProfessorDisciplina) => [
               item.turma.id,
               item.turma,
             ])
           ).values()
         );
 
-        console.log("turmas:", turmasUnicas);
         setTurmasUnicas(turmasUnicas);
       } catch {
         setError("Erro ao buscar dados.");
@@ -95,7 +117,9 @@ function Avaliacao() {
   /* ================= HANDLERS ================= */
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -207,6 +231,66 @@ function Avaliacao() {
     }
   };
 
+  /* ================= PATCH VISIBILIDADE ================= */
+
+  const handleVisible = async (av: Avaliacao) => {
+    try {
+      const professorId = localStorage.getItem("id");
+
+      await axios.patch(
+        `http://localhost:3000/avaliacao/professor/${av.id}`,
+        { visivelParaAluno: !av.visivelParaAluno },
+        {
+          headers: {
+            "professor-id": professorId,
+          },
+        }
+      );
+
+      setAvaliacao((prev) =>
+        prev.map((a) =>
+          a.id === av.id
+            ? { ...a, visivelParaAluno: !a.visivelParaAluno }
+            : a
+        )
+      );
+    } catch {
+      setError("Erro ao atualizar visibilidade da avaliação.");
+    }
+  };
+
+  /* ================= COLUMNS ================= */
+
+  const columns: TableColumn<Avaliacao>[] = [
+    { key: "titulo", header: "Título" },
+    { key: "tipo", header: "Tipo" },
+    {
+      key: "turma",
+      header: "Turma",
+      render: (av) => av.turma.nome,
+    },
+    {
+      key: "disciplina",
+      header: "Disciplina",
+      render: (av) => av.disciplina.nome,
+    },
+    { key: "periodo", header: "Período" },
+    { key: "anoLetivo", header: "Ano Letivo" },
+    { key: "descricao", header: "Descrição" },
+    {
+      key: "visivelParaAluno",
+      header: "Visível para Aluno",
+      render: (av) => (
+        <button
+          className="action-btn edit-btn"
+          onClick={() => handleVisible(av)}
+        >
+          {av.visivelParaAluno ? "Ocultar" : "Mostrar"}
+        </button>
+      ),
+    },
+  ];
+
   /* ================= RENDER ================= */
 
   return (
@@ -220,10 +304,13 @@ function Avaliacao() {
         <div className="profile-fields">
           {/* COLUNA 1 */}
           <div className="column">
-
             <div className="form-group">
               <label>Turma</label>
-              <select value={form.turmaId} onChange={handleTurmaChange} required>
+              <select
+                value={form.turmaId}
+                onChange={handleTurmaChange}
+                required
+              >
                 <option value="">Selecione</option>
                 {turmasUnicas.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -246,7 +333,12 @@ function Avaliacao() {
 
             <div className="form-group">
               <label>Tipo</label>
-              <select name="tipo" value={form.tipo} onChange={handleChange} required>
+              <select
+                name="tipo"
+                value={form.tipo}
+                onChange={handleChange}
+                required
+              >
                 <option value="">Selecione</option>
                 <option value="TESTE">Teste</option>
                 <option value="PROVA">Prova</option>
@@ -271,13 +363,16 @@ function Avaliacao() {
 
             <div className="form-group">
               <label>Arquivo</label>
-              <input type="file" ref={fileInputRef} onChange={handleFileChange} />
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+              />
             </div>
           </div>
 
           {/* COLUNA 2 */}
           <div className="column">
-
             <div className="form-group">
               <label>Disciplina</label>
               <select
@@ -329,11 +424,22 @@ function Avaliacao() {
           <button type="submit" className="save-btn">
             Cadastrar
           </button>
-          <button type="button" className="cancel-btn" onClick={limparForm}>
+          <button
+            type="button"
+            className="cancel-btn"
+            onClick={limparForm}
+          >
             Cancelar
           </button>
         </div>
       </form>
+
+      <h2>Lista das Avaliações</h2>
+      <DataTable
+        columns={columns}
+        data={avaliacoes}
+        emptyMessage="Nenhuma Avaliação Lançada"
+      />
     </div>
   );
 }

@@ -48,5 +48,8 @@ GET http://localhost:3000/matricula-disciplina
 GET http://localhost:3000/turma-professor-disciplina
 
 ###
+GET http://localhost:3000/avaliacao/professor/1
+
+###
 GET http://localhost:3000/submissao-avaliacao/professor/avaliacao/1
 professor-id: 1

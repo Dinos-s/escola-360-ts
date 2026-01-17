@@ -211,7 +211,8 @@ function CriaProfessor() {
     const endpoint = `http://localhost:3000/professor/${usuario.id}/status`;
 
     await axios.patch(endpoint, { status: novoStatus });
-    window.location.reload();
+    // window.location.reload();
+    buscarProfessores();
   };
 
   const formatarParaInputDate = (data: string) => {

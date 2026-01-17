@@ -206,7 +206,8 @@ function CriaAluno() {
     const endpoint = `http://localhost:3000/aluno/${usuario.id}/status`;
 
     await axios.patch(endpoint, { status: novoStatus });
-    window.location.reload();
+    // window.location.reload();
+    buscarAlunos();
   };
 
   const formatarParaInputDate = (data: string) => {
