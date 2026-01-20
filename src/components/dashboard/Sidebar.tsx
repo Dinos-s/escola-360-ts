@@ -31,7 +31,7 @@ const ROTAS_PROFESSOR = [
 const ROTAS_COORDENADOR = [
   { to: "/dashboard", name: "Mural", end: true },
   { to: "/dashboard/usuarios", name: "Gerenciar Usuários" },
-  { to: "/dashboard/confNotas", name: " Confirma Notas" },
+  { to: "/dashboard/confNotas", name: "Confirma Notas" },
   { to: "/dashboard/crimural", name: "Criar Mural" },
   { to: "/dashboard/criCalendario", name: "Criar Calendário" },
   { to: "/dashboard/disciplina", name: "Criar Disciplina" },
@@ -40,9 +40,9 @@ const ROTAS_COORDENADOR = [
   { to: "/dashboard/matriculaDisciplina", name: "Matrícula e Disciplina" },
   { to: "/dashboard/professorDiciplina", name: "Vincular Professor e Disciplina" },
   { to: "/dashboard/perfil", name: "Meu Perfil" },
-  { to: "/dashboard/trocaSenha", name: "Trocar Senha" },
   { to: "/dashboard/criaAluno", name: "Criar Aluno" },
   { to: "/dashboard/criaProfessor", name: "Criar Professor" },
+  { to: "/dashboard/trocaSenha", name: "Trocar Senha" },
 ];
 
 function Sidebar() {
