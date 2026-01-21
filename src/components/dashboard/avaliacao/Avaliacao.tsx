@@ -46,6 +46,16 @@ type Avaliacao = {
   };
 };
 
+type LinhaSubmissao = {
+  id: number;
+  aluno: {
+    nome: string;
+  };
+  nota: number | null;
+  estado: "PENDENTE" | "CORRIGIDO";
+};
+
+
 function Avaliacao() {
   const anoAtual = new Date().getFullYear().toString();
 
@@ -65,6 +75,11 @@ function Avaliacao() {
     useState<TurmaProfessorDisciplina[]>([]);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const [avaliacaoSelecionada, setAvaliacaoSelecionada] = useState<Avaliacao | null>(null);
+
+  const [submissoes, setSubmissoes] = useState<LinhaSubmissao[]>([]);
+
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -93,13 +108,13 @@ function Avaliacao() {
 
         const [resTPD, resAV] = await Promise.all([
           axios.get(
-          "http://localhost:3000/turma-professor-disciplina/professor",
-          {
-            headers: {
-              "professor-id": professorId,
-            },
-          }
-        ),
+            "http://localhost:3000/turma-professor-disciplina/professor",
+            {
+              headers: {
+                "professor-id": professorId,
+              },
+            }
+          ),
           axios.get(
             `http://localhost:3000/avaliacao/professor/${professorId}`
           ),
@@ -125,6 +140,29 @@ function Avaliacao() {
 
     fetchData();
   }, []);
+
+  const carregarSubmissoes = async (avaliacao: Avaliacao) => {
+    try {
+      const professorId = localStorage.getItem("id");
+
+      if (!professorId) return;
+
+      const res = await axios.get(
+        `http://localhost:3000/submissao-avaliacao/professor/avaliacao/${avaliacao.id}`,
+        {
+          headers: {
+            "professor-id": professorId,
+          },
+        }
+      );
+
+      setAvaliacaoSelecionada(avaliacao);
+      setSubmissoes(res.data);
+    } catch {
+      setError("Erro ao carregar submissões");
+    }
+  };
+
 
   /* ================= HANDLERS ================= */
 
@@ -243,6 +281,41 @@ function Avaliacao() {
     }
   };
 
+  const corrigirSubmissao = async (submissaoId: number) => {
+  const nota = prompt("Informe a nota:");
+  if (!nota) return;
+
+  try {
+    const professorId = localStorage.getItem("id");
+
+    await axios.patch(
+      `http://localhost:3000/submissao-avaliacao/professor/${submissaoId}/corrigir`,
+      { nota: Number(nota) },
+      {
+        headers: {
+          "professor-id": professorId,
+        },
+      }
+    );
+
+    if (avaliacaoSelecionada) {
+      carregarSubmissoes(avaliacaoSelecionada);
+    }
+  } catch {
+    setError("Erro ao corrigir submissão");
+  }
+};
+
+const baixarSubmissao = (submissaoId: number) => {
+  const professorId = localStorage.getItem("id");
+
+  window.open(
+    `http://localhost:3000/submissao-avaliacao/professor/submissao/${submissaoId}/download`,
+    "_blank"
+  );
+};
+
+
   /* ================= PATCH VISIBILIDADE ================= */
 
   const handleVisible = async (av: Avaliacao) => {
@@ -303,6 +376,53 @@ function Avaliacao() {
     },
   ];
 
+  const columnsSubmissoes: TableColumn<LinhaSubmissao>[] = [
+  {
+    key: "aluno",
+    header: "Aluno",
+    render: (s) => s.aluno.nome,
+  },
+  {
+    key: "estado",
+    header: "Enviada",
+    render: (s) => (s.estado ? "Sim" : "Não"),
+  },
+  {
+    key: "estado",
+    header: "Corrigida",
+    render: (s) => (s.estado === "CORRIGIDO" ? "Sim" : "Não"),
+  },
+  {
+    key: "nota",
+    header: "Nota",
+    render: (s) => (s.nota ?? "-"),
+  },
+  {
+    key: "acoes",
+    header: "Ações",
+    render: (s) => (
+      <>
+        {s.estado !== "CORRIGIDO" && (
+          <button
+            className="action-btn edit-btn"
+            onClick={() => corrigirSubmissao(s.id)}
+          >
+            Corrigir
+          </button>
+        )}
+
+        <button
+          className="action-btn"
+          onClick={() => baixarSubmissao(s.id)}
+        >
+          Baixar
+        </button>
+      </>
+    ),
+  },
+];
+
+
   /* ================= RENDER ================= */
 
   return (
@@ -323,7 +443,7 @@ function Avaliacao() {
                 onChange={handleTurmaChange}
                 required
               >
-                <option value="">Selecione</option>
+                <option value="">Selecione uma turma</option>
                 {turmasUnicas.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.nome}
@@ -452,6 +572,21 @@ function Avaliacao() {
         data={avaliacoes}
         emptyMessage="Nenhuma Avaliação Lançada"
       />
+
+      {avaliacaoSelecionada && (
+        <>
+          <h2>
+            Submissões — {avaliacaoSelecionada.titulo}
+          </h2>
+
+          <DataTable
+            columns={columnsSubmissoes}
+            data={submissoes}
+            emptyMessage="Nenhuma submissão enviada"
+          />
+        </>
+      )}
+
     </div>
   );
 }
