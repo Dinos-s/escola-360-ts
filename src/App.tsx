@@ -65,11 +65,11 @@ function App() {
         <Route index element={<Mural />}/>
 
         {/* ALUNO */}
-        <Route path="graficos" element={
+        {/* <Route path="graficos" element={
           <RoleBasedRoute allowed={["aluno"]}>
             <Graficos />
           </RoleBasedRoute>
-        } />
+        } /> */}
 
         <Route path="boletim" element={
           <RoleBasedRoute allowed={["aluno"]}>

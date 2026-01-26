@@ -9,7 +9,7 @@ import "./Sidebar.css";
 
 const ROTAS_ALUNO = [
   { to: "/dashboard", name: "Mural", end: true },
-  { to: "/dashboard/graficos", name: "Gráficos de Desempenho" },
+  // { to: "/dashboard/graficos", name: "Gráficos de Desempenho" },
   { to: "/dashboard/boletim", name: "Boletim" },
   { to: "/dashboard/historico", name: "Histórico" },
   { to: "/dashboard/calendario", name: "Calendário" },
